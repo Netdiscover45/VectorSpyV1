@@ -1,0 +1,2787 @@
+{% extends "base.html" %}
+
+{% block title %}
+VectorSpy | Network Scan
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   VECTORSPY NETWORK SCAN
+   ========================================================= */
+
+.network-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO HEADER
+   ========================================================= */
+
+.network-hero {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 88% 20%,
+            rgba(0, 217, 255, 0.10),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #071824,
+            #091b29 55%,
+            #06141f
+        );
+
+    border: 1px solid #17374a;
+    border-radius: 12px;
+
+    padding: 25px 28px;
+    margin-bottom: 18px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+
+.network-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 360px;
+    height: 120px;
+
+    right: -40px;
+    top: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 48%,
+            rgba(0, 217, 255, 0.15) 49%,
+            transparent 51%
+        );
+
+    opacity: 0.8;
+
+    pointer-events: none;
+}
+
+
+.network-hero-content {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+
+    gap: 17px;
+}
+
+
+.network-hero-icon {
+    width: 56px;
+    height: 56px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    color: #00d9ff;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 217, 255, 0.16),
+            rgba(0, 217, 255, 0.03)
+        );
+
+    border: 1px solid rgba(0, 217, 255, 0.35);
+
+    font-size: 25px;
+
+    box-shadow:
+        0 0 25px rgba(0, 217, 255, 0.10);
+}
+
+
+.network-hero h1 {
+    margin: 0;
+
+    color: #f2f8fb;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+}
+
+
+.network-hero h1 span {
+    color: #00d9ff;
+}
+
+
+.network-hero p {
+    margin: 6px 0 0;
+
+    color: #88a4b7;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MAIN SCANNER
+   ========================================================= */
+
+.network-scanner {
+    background:
+        linear-gradient(
+            145deg,
+            #071824,
+            #081925
+        );
+
+    border: 1px solid #17384b;
+
+    border-radius: 11px;
+
+    padding: 23px;
+
+    margin-bottom: 17px;
+
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   SCANNER HEADER
+   ========================================================= */
+
+.network-scanner-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-bottom: 20px;
+}
+
+
+.network-scanner-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    color: #00d9ff;
+
+    background: rgba(0, 217, 255, 0.08);
+
+    border: 1px solid rgba(0, 217, 255, 0.20);
+
+    font-size: 18px;
+}
+
+
+.network-scanner-header h2 {
+    margin: 0;
+
+    color: #edf6fa;
+
+    font-size: 16px;
+}
+
+
+.network-scanner-header p {
+    margin: 4px 0 0;
+
+    color: #7892a5;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   TARGET FORM
+   ========================================================= */
+
+.target-form {
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 11px;
+}
+
+
+.target-wrapper {
+    flex: 1;
+
+    position: relative;
+}
+
+
+.target-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #9db4c3;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+.target-input-wrapper {
+    position: relative;
+}
+
+
+.target-input-icon {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #608397;
+
+    font-size: 14px;
+
+    pointer-events: none;
+}
+
+
+.target-input {
+    width: 100%;
+
+    height: 45px;
+
+    box-sizing: border-box;
+
+    padding: 0 14px 0 40px;
+
+    background: #08131e;
+
+    border: 1px solid #244256;
+
+    border-radius: 7px;
+
+    color: #dce8f2;
+
+    outline: none;
+
+    font-size: 12px;
+
+    transition: 0.2s ease;
+}
+
+
+.target-input::placeholder {
+    color: #607889;
+}
+
+
+.target-input:hover {
+    border-color: #31566c;
+}
+
+
+.target-input:focus {
+    border-color: #00d9ff;
+
+    box-shadow:
+        0 0 0 2px rgba(0, 217, 255, 0.08),
+        0 0 18px rgba(0, 217, 255, 0.05);
+}
+
+
+/* =========================================================
+   SCAN BUTTON
+   ========================================================= */
+
+.scan-button {
+    height: 45px;
+
+    min-width: 195px;
+
+    padding: 0 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00d9ff,
+            #00bfe3
+        );
+
+    color: #04131c;
+
+    border: none;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+    box-shadow:
+        0 5px 18px rgba(0, 217, 255, 0.12);
+}
+
+
+.scan-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 22px rgba(0, 217, 255, 0.20);
+}
+
+
+.scan-button:active {
+    transform: translateY(0);
+}
+
+
+.scan-button:disabled {
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   SECURITY NOTICE
+   ========================================================= */
+
+.security-notice {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 14px;
+
+    padding: 12px 14px;
+
+    background: rgba(255, 180, 0, 0.045);
+
+    border: 1px solid rgba(255, 180, 0, 0.18);
+
+    border-left: 3px solid #dcae39;
+
+    border-radius: 6px;
+
+    color: #8f9eaa;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+.security-notice-icon {
+    color: #f0c75e;
+
+    font-size: 13px;
+
+    flex-shrink: 0;
+}
+
+
+.security-notice strong {
+    color: #e5bd55;
+}
+
+
+/* =========================================================
+   INFORMATION CARDS
+   ========================================================= */
+
+.info-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 17px;
+}
+
+
+.info-card {
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #071824,
+            #081925
+        );
+
+    border: 1px solid #17384b;
+
+    border-radius: 9px;
+
+    padding: 18px;
+
+    transition: 0.2s ease;
+}
+
+
+.info-card:hover {
+    border-color: #24536a;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.13);
+}
+
+
+.info-card-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 12px;
+}
+
+
+.info-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: rgba(0, 217, 255, 0.06);
+
+    border: 1px solid rgba(0, 217, 255, 0.14);
+
+    color: #00d9ff;
+
+    font-size: 16px;
+}
+
+
+.info-card h3 {
+    margin: 0;
+
+    color: #e3edf2;
+
+    font-size: 13px;
+}
+
+
+.info-card p {
+    margin: 0;
+
+    color: #728b9b;
+
+    font-size: 10px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   SCAN PROCESS
+   ========================================================= */
+
+.scan-info {
+    margin-top: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #071824,
+            #081925
+        );
+
+    border: 1px solid #17384b;
+
+    border-radius: 9px;
+
+    padding: 19px;
+}
+
+
+.scan-info-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+
+.scan-info-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: rgba(0, 217, 255, 0.06);
+
+    border: 1px solid rgba(0, 217, 255, 0.14);
+
+    color: #00d9ff;
+}
+
+
+.scan-info h3 {
+    margin: 0;
+
+    color: #e3edf2;
+
+    font-size: 14px;
+}
+
+
+.scan-info-subtitle {
+    margin-top: 3px;
+
+    color: #688294;
+
+    font-size: 9px;
+}
+
+
+.scan-process {
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, 1fr);
+
+    gap: 8px;
+}
+
+
+.process-item {
+    position: relative;
+
+    padding: 11px 8px;
+
+    text-align: center;
+
+    background: #08141e;
+
+    border: 1px solid #163444;
+
+    border-radius: 6px;
+}
+
+
+.process-number {
+    display: inline-flex;
+
+    width: 22px;
+    height: 22px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    margin-bottom: 6px;
+
+    background: rgba(0, 217, 255, 0.08);
+
+    border: 1px solid rgba(0, 217, 255, 0.20);
+
+    color: #00d9ff;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+.process-item span:last-child {
+    display: block;
+
+    color: #8198a7;
+
+    font-size: 8px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   SCAN LOADING OVERLAY
+   ========================================================= */
+
+.scan-loading-overlay {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0, 217, 255, 0.08),
+            transparent 35%
+        ),
+        rgba(4, 12, 18, 0.96);
+
+    backdrop-filter: blur(5px);
+}
+
+
+.scan-loading-overlay.active {
+    display: flex;
+}
+
+
+.scan-loading-card {
+    width: min(430px, calc(100% - 40px));
+
+    padding: 35px 30px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #071824,
+            #091d2a
+        );
+
+    border: 1px solid
+        rgba(0, 217, 255, 0.22);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 25px 80px
+        rgba(0, 0, 0, 0.45),
+        0 0 45px
+        rgba(0, 217, 255, 0.06);
+}
+
+
+/* =========================================================
+   LOADER
+   ========================================================= */
+
+.scan-loader {
+    position: relative;
+
+    width: 76px;
+    height: 76px;
+
+    margin: 0 auto 22px;
+}
+
+
+.scan-loader-ring {
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 50%;
+
+    border: 2px solid
+        rgba(0, 217, 255, 0.12);
+
+    border-top-color: #00d9ff;
+
+    animation:
+        vectorspy-spin 1s linear infinite;
+}
+
+
+.scan-loader-ring::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 9px;
+
+    border-radius: 50%;
+
+    border: 1px solid
+        rgba(0, 217, 255, 0.12);
+
+    border-bottom-color: #00d9ff;
+
+    animation:
+        vectorspy-spin-reverse 1.5s linear infinite;
+}
+
+
+.scan-loader-center {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #00d9ff;
+
+    font-size: 22px;
+
+    text-shadow:
+        0 0 15px
+        rgba(0, 217, 255, 0.45);
+}
+
+
+@keyframes vectorspy-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+@keyframes vectorspy-spin-reverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+
+}
+
+
+/* =========================================================
+   LOADING TEXT
+   ========================================================= */
+
+.scan-loading-title {
+    color: #edf8fc;
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+    margin-bottom: 7px;
+}
+
+
+.scan-loading-subtitle {
+    color: #7893a4;
+
+    font-size: 11px;
+
+    margin-bottom: 20px;
+}
+
+
+.scan-target-display {
+    display: inline-block;
+
+    max-width: 100%;
+
+    padding: 7px 12px;
+
+    margin-bottom: 22px;
+
+    background:
+        rgba(0, 217, 255, 0.06);
+
+    border: 1px solid
+        rgba(0, 217, 255, 0.14);
+
+    border-radius: 6px;
+
+    color: #00d9ff;
+
+    font-size: 11px;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.scan-loading-status {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #8aa2b0;
+
+    font-size: 10px;
+
+    margin-bottom: 18px;
+}
+
+
+.scan-status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #00d9ff;
+
+    box-shadow:
+        0 0 10px
+        rgba(0, 217, 255, 0.7);
+
+    animation:
+        vectorspy-pulse 1s ease-in-out infinite;
+}
+
+
+@keyframes vectorspy-pulse {
+
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+.scan-progress {
+    width: 100%;
+
+    height: 3px;
+
+    overflow: hidden;
+
+    background: #102735;
+
+    border-radius: 10px;
+}
+
+
+.scan-progress-bar {
+    width: 35%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #00d9ff,
+            transparent
+        );
+
+    animation:
+        vectorspy-progress 1.4s ease-in-out infinite;
+}
+
+
+@keyframes vectorspy-progress {
+
+    0% {
+        transform: translateX(-140%);
+    }
+
+    100% {
+        transform: translateX(390%);
+    }
+
+}
+
+
+.scan-loading-note {
+    margin-top: 14px;
+
+    color: #506a78;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SCAN RESULTS
+   ========================================================= */
+
+.results-section {
+    margin-top: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #071824,
+            #081925
+        );
+
+    border: 1px solid #17384b;
+
+    border-radius: 11px;
+
+    padding: 23px;
+
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+
+.results-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #17384b;
+}
+
+
+.results-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.results-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    color: #00d9ff;
+
+    background: rgba(0, 217, 255, 0.08);
+
+    border: 1px solid rgba(0, 217, 255, 0.20);
+}
+
+
+.results-header h2 {
+    margin: 0;
+
+    color: #edf6fa;
+
+    font-size: 17px;
+}
+
+
+.results-header p {
+    margin: 4px 0 0;
+
+    color: #7892a5;
+
+    font-size: 11px;
+}
+
+
+.results-header p strong {
+    color: #00d9ff;
+}
+
+
+.results-badge {
+    padding: 6px 10px;
+
+    border-radius: 5px;
+
+    color: #00d9ff;
+
+    background: rgba(0, 217, 255, 0.07);
+
+    border: 1px solid rgba(0, 217, 255, 0.18);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================================================
+   HOST BLOCK
+   ========================================================= */
+
+.host-result {
+    margin-top: 15px;
+
+    border: 1px solid #17384b;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background: #07131d;
+}
+
+
+.host-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 13px 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 217, 255, 0.06),
+            transparent
+        );
+
+    border-bottom: 1px solid #17384b;
+}
+
+
+.host-name {
+    color: #e8f3f7;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.host-ip {
+    color: #00d9ff;
+}
+
+
+.host-label {
+    color: #718b9b;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.results-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #24536a
+        #08141e;
+}
+
+
+.results-table-wrapper::-webkit-scrollbar {
+    height: 7px;
+}
+
+
+.results-table-wrapper::-webkit-scrollbar-track {
+    background: #08141e;
+}
+
+
+.results-table-wrapper::-webkit-scrollbar-thumb {
+    background: #24536a;
+
+    border-radius: 10px;
+}
+
+
+.results-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 1550px;
+
+    table-layout: auto;
+}
+
+
+.results-table th {
+    padding: 11px 12px;
+
+    color: #6f8999;
+
+    background: #081722;
+
+    border-bottom: 1px solid #17384b;
+
+    text-align: left;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    white-space: nowrap;
+}
+
+
+.results-table td {
+    padding: 12px;
+
+    color: #b9cbd5;
+
+    border-bottom: 1px solid #122d3c;
+
+    font-size: 10px;
+
+    vertical-align: middle;
+}
+
+
+.results-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.results-table tbody tr:hover {
+    background: rgba(0, 217, 255, 0.025);
+}
+
+
+.port-number {
+    color: #00d9ff;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.service-name {
+    color: #dce8ef;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+.version-text {
+    color: #7894a5;
+
+    white-space: normal;
+
+    word-break: break-word;
+}
+
+
+/* Product */
+
+.results-table td:nth-child(5) {
+    min-width: 120px;
+
+    max-width: 180px;
+
+    color: #9bb3c1;
+
+    white-space: normal;
+
+    word-break: break-word;
+}
+
+
+/* Version */
+
+.results-table td:nth-child(6) {
+    min-width: 130px;
+
+    max-width: 190px;
+
+    white-space: normal;
+
+    word-break: break-word;
+}
+
+
+/* Confidence */
+
+.results-table td:nth-child(7) {
+    white-space: nowrap;
+}
+
+
+/* Evidence */
+
+.results-table td:nth-child(10) {
+    min-width: 240px;
+
+    max-width: 330px;
+
+    white-space: normal;
+
+    word-break: break-word;
+
+    line-height: 1.5;
+}
+
+
+/* Recommendation */
+
+.results-table td:nth-child(11) {
+    min-width: 260px;
+
+    max-width: 350px;
+
+    white-space: normal;
+
+    word-break: break-word;
+
+    line-height: 1.5;
+}
+
+
+.state-open {
+    color: #38e47a;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.recommendation {
+    color: #8199a7;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CONFIDENCE
+   ========================================================= */
+
+.confidence-value {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 45px;
+
+    padding: 4px 7px;
+
+    color: #79d9ff;
+
+    background: rgba(0, 217, 255, 0.06);
+
+    border: 1px solid rgba(0, 217, 255, 0.13);
+
+    border-radius: 4px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   EVIDENCE
+   ========================================================= */
+
+.evidence-text {
+    display: block;
+
+    color: #7897a8;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: 9px;
+
+    line-height: 1.55;
+
+    background: rgba(0, 0, 0, 0.12);
+
+    border-radius: 4px;
+
+    padding: 5px 7px;
+}
+
+
+/* =========================================================
+   SEVERITY BADGES
+   ========================================================= */
+
+.severity-badge {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 4px;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.severity-critical {
+    color: #ff6b6b;
+
+    background: rgba(255, 60, 60, 0.10);
+
+    border: 1px solid rgba(255, 60, 60, 0.18);
+}
+
+
+.severity-high {
+    color: #ff7070;
+
+    background: rgba(255, 70, 70, 0.10);
+
+    border: 1px solid rgba(255, 70, 70, 0.18);
+}
+
+
+.severity-medium {
+    color: #ffc44d;
+
+    background: rgba(255, 190, 50, 0.10);
+
+    border: 1px solid rgba(255, 190, 50, 0.18);
+}
+
+
+.severity-low {
+    color: #4de18b;
+
+    background: rgba(50, 210, 120, 0.09);
+
+    border: 1px solid rgba(50, 210, 120, 0.16);
+}
+
+
+/* =========================================================
+   SCORE
+   ========================================================= */
+
+.score-value {
+    color: #dceaf0;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ERROR RESULT
+   ========================================================= */
+
+.scan-error {
+    padding: 15px 17px;
+
+    background: rgba(255, 70, 70, 0.05);
+
+    border: 1px solid rgba(255, 70, 70, 0.18);
+
+    border-left: 3px solid #ff6868;
+
+    border-radius: 7px;
+
+    color: #d9a0a0;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+.scan-error strong {
+    color: #ff7777;
+}
+
+
+/* =========================================================
+   EMPTY RESULT
+   ========================================================= */
+
+.no-open-ports {
+    padding: 25px;
+
+    text-align: center;
+
+    color: #708898;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.network-footer {
+    text-align: center;
+
+    padding: 22px 0 5px;
+
+    color: #607784;
+
+    font-size: 10px;
+}
+
+
+.network-footer span {
+    color: #00aeca;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+    .scan-process {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .target-form {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .scan-button {
+        width: 100%;
+    }
+
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .scan-process {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .results-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .network-hero {
+        padding: 20px;
+    }
+
+
+    .network-hero-content {
+        align-items: flex-start;
+    }
+
+
+    .network-hero-icon {
+        width: 46px;
+        height: 46px;
+
+        font-size: 20px;
+    }
+
+
+    .network-hero h1 {
+        font-size: 22px;
+    }
+
+
+    .network-hero p {
+        font-size: 11px;
+    }
+
+
+    .network-scanner,
+    .scan-info,
+    .results-section {
+        padding: 15px;
+    }
+
+
+    .scan-process {
+        grid-template-columns: 1fr;
+    }
+
+
+    .scan-loading-card {
+        padding: 30px 20px;
+    }
+
+}
+
+
+/* =========================================================
+   NMAP DISCOVERY CONTROLS
+   ========================================================= */
+.scan-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.scan-option-card {
+    padding: 14px;
+    background: #08141e;
+    border: 1px solid #17384b;
+    border-radius: 7px;
+}
+
+.scan-option-card label {
+    display: block;
+    margin-bottom: 7px;
+    color: #9db4c3;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.scan-option-card select,
+.scan-option-card input {
+    width: 100%;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 0 11px;
+    color: #dce8f2;
+    background: #08131e;
+    border: 1px solid #244256;
+    border-radius: 6px;
+    outline: none;
+    font-size: 11px;
+}
+
+.scan-option-card select:focus,
+.scan-option-card input:focus {
+    border-color: #00d9ff;
+    box-shadow: 0 0 0 2px rgba(0,217,255,.08);
+}
+
+.port-filter-help {
+    margin-top: 6px;
+    color: #607889;
+    font-size: 9px;
+}
+
+.discovery-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
+    margin-bottom: 15px;
+}
+
+.discovery-stat {
+    padding: 12px;
+    background: #08141e;
+    border: 1px solid #17384b;
+    border-radius: 7px;
+}
+
+.discovery-stat-label {
+    color: #6f8999;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.discovery-stat-value {
+    margin-top: 4px;
+    color: #e8f4f8;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.discovery-stat.open .discovery-stat-value { color: #38e47a; }
+.discovery-stat.closed .discovery-stat-value { color: #8da3af; }
+.discovery-stat.filtered .discovery-stat-value { color: #ffc44d; }
+.discovery-stat.total .discovery-stat-value { color: #00d9ff; }
+
+.state-closed {
+    color: #91a5af;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.state-filtered {
+    color: #ffc44d;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.scan-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.scan-meta-badge {
+    padding: 5px 8px;
+    border: 1px solid #21465a;
+    border-radius: 5px;
+    color: #8ca6b5;
+    background: rgba(0,217,255,.035);
+    font-size: 8px;
+}
+
+@media (max-width: 800px) {
+    .scan-options-grid { grid-template-columns: 1fr; }
+    .discovery-summary { grid-template-columns: repeat(2, 1fr); }
+}
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<!-- =====================================================
+     SCAN LOADING OVERLAY
+     ===================================================== -->
+
+<div
+    id="scanLoadingOverlay"
+    class="scan-loading-overlay"
+>
+
+    <div class="scan-loading-card">
+
+        <div class="scan-loader">
+
+            <div class="scan-loader-ring"></div>
+
+            <div class="scan-loader-center">
+                ◉
+            </div>
+
+        </div>
+
+
+        <div class="scan-loading-title">
+            SCAN IN PROGRESS
+        </div>
+
+
+        <div class="scan-loading-subtitle">
+            VectorSpy is performing network reconnaissance
+        </div>
+
+
+        <div
+            id="scanTargetDisplay"
+            class="scan-target-display"
+        >
+            Target
+        </div>
+
+
+        <div class="scan-loading-status">
+
+            <span class="scan-status-dot"></span>
+
+            <span id="scanStatusText">
+                Initializing Nmap scanner...
+            </span>
+
+        </div>
+
+
+        <div class="scan-progress">
+
+            <div class="scan-progress-bar"></div>
+
+        </div>
+
+
+        <div class="scan-loading-note">
+
+            Discovering hosts, open ports and services.
+            Please wait for the assessment to complete.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="network-page">
+
+
+    <!-- =====================================================
+         PAGE HERO
+         ===================================================== -->
+
+    <section class="network-hero">
+
+        <div class="network-hero-content">
+
+            <div class="network-hero-icon">
+                ◉
+            </div>
+
+            <div>
+
+                <h1>
+                    Network <span>Scan</span>
+                </h1>
+
+                <p>
+                    Perform an authorized network assessment using Nmap
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         NMAP SCANNER
+         ===================================================== -->
+
+    <section class="network-scanner">
+
+        <div class="network-scanner-header">
+
+            <div class="network-scanner-icon">
+                ◉
+            </div>
+
+            <div>
+
+                <h2>
+                    Network Scanner
+                </h2>
+
+                <p>
+                    Discover open ports, services and service versions
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- NETWORK SCAN FORM -->
+
+        <form
+            action="/network-scan"
+            method="POST"
+            class="target-form"
+            id="networkScanForm"
+        >
+
+            <div class="target-wrapper">
+
+                <label
+                    for="target"
+                    class="target-label"
+                >
+                    Target Host / IP Address
+                </label>
+
+
+                <div class="target-input-wrapper">
+
+                    <span class="target-input-icon">
+                        ⌖
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="target"
+                        name="target"
+                        class="target-input"
+                        placeholder="127.0.0.1 or authorized hostname"
+                        value="{{ target or '' }}"
+                        required
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="scan-button"
+                id="scanButton"
+            >
+                Start Network Scan &nbsp; →
+            </button>
+
+        </form>
+
+        <!-- NMAP DISCOVERY OPTIONS -->
+        <div class="scan-options-grid">
+
+            <div class="scan-option-card">
+                <label for="scan_mode">Scan Profile</label>
+                <select id="scan_mode" name="scan_mode" form="networkScanForm">
+                    <option value="fast" {% if request.form.get("scan_mode") == "fast" %}selected{% endif %}>
+                        Fast Discovery — Top 100 Ports
+                    </option>
+                    <option value="balanced" {% if request.form.get("scan_mode") == "balanced" %}selected{% endif %}>
+                        Balanced — Top 1000 + Service Detection
+                    </option>
+                    <option value="accurate" {% if request.form.get("scan_mode", "accurate") == "accurate" %}selected{% endif %}>
+                        Accurate — Detailed Version Detection
+                    </option>
+                </select>
+            </div>
+
+            <div class="scan-option-card">
+                <label for="port_filter">Port Filter</label>
+                <input
+                    type="text"
+                    id="port_filter"
+                    name="port_filter"
+                    form="networkScanForm"
+                    value="{{ request.form.get('port_filter', '') }}"
+                    placeholder="Example: 22,80,443 or 1-1000"
+                    autocomplete="off"
+                >
+                <div class="port-filter-help">
+                    Leave empty to use the selected scan profile. Ports: 1–65535.
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- SECURITY NOTICE -->
+
+        <div class="security-notice">
+
+            <span class="security-notice-icon">
+                ⚠
+            </span>
+
+            <div>
+
+                <strong>
+                    Authorized Testing Only:
+                </strong>
+
+                Use Network Scan only against systems,
+                hosts or networks that you own or have
+                explicit permission to assess.
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         INFORMATION CARDS
+         ===================================================== -->
+
+    <div class="info-grid">
+
+
+        <div class="info-card">
+
+            <div class="info-card-top">
+
+                <div class="info-icon">
+                    ⌕
+                </div>
+
+                <h3>
+                    Port Discovery
+                </h3>
+
+            </div>
+
+            <p>
+                Identifies open, closed and filtered TCP port states on the target system.
+            </p>
+
+        </div>
+
+
+
+        <div class="info-card">
+
+            <div class="info-card-top">
+
+                <div class="info-icon">
+                    ⚙
+                </div>
+
+                <h3>
+                    Service Detection
+                </h3>
+
+            </div>
+
+            <p>
+                Detects running services and attempts
+                to identify their products and versions.
+            </p>
+
+        </div>
+
+
+
+        <div class="info-card">
+
+            <div class="info-card-top">
+
+                <div class="info-icon">
+                    🛡
+                </div>
+
+                <h3>
+                    Risk Analysis
+                </h3>
+
+            </div>
+
+            <p>
+                Applies VectorSpy's rule-based risk engine
+                to discovered network services.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SCAN WORKFLOW
+         ===================================================== -->
+
+    <section class="scan-info">
+
+
+        <div class="scan-info-header">
+
+            <div class="scan-info-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <h3>
+                    Network Assessment Workflow
+                </h3>
+
+                <div class="scan-info-subtitle">
+                    Processing stages performed by VectorSpy
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="scan-process">
+
+
+            <div class="process-item">
+
+                <span class="process-number">
+                    01
+                </span>
+
+                <span>
+                    Target
+                    Validation
+                </span>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <span class="process-number">
+                    02
+                </span>
+
+                <span>
+                    Host &amp; Port
+                    Discovery
+                </span>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <span class="process-number">
+                    03
+                </span>
+
+                <span>
+                    Service
+                    Detection
+                </span>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <span class="process-number">
+                    04
+                </span>
+
+                <span>
+                    Version
+                    Detection
+                </span>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <span class="process-number">
+                    05
+                </span>
+
+                <span>
+                    Risk
+                    Classification
+                </span>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <span class="process-number">
+                    06
+                </span>
+
+                <span>
+                    Findings &amp;
+                    Recommendations
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SCAN RESULTS
+         ===================================================== -->
+
+    {% if results %}
+
+    <section class="results-section">
+
+
+        <div class="results-header">
+
+            <div class="results-title">
+
+                <div class="results-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <h2>
+                        Security Scan Results
+                    </h2>
+
+                    <p>
+                        Network assessment results for
+                        <strong>{{ target }}</strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="results-badge">
+                Nmap Network Assessment
+            </div>
+
+        </div>
+
+
+
+        {% for host in results %}
+
+            {% if host.error %}
+
+                <div class="scan-error">
+
+                    <strong>
+                        Scan Failed:
+                    </strong>
+
+                    {{ host.error }}
+
+                </div>
+
+            {% else %}
+
+                <div class="host-result">
+
+                    {# Calculate counts from the actual Nmap port states. #}
+                    {% set ns = namespace(open=0, closed=0, filtered=0, total=0) %}
+                    {% for p in host.ports %}
+                        {% set ns.total = ns.total + 1 %}
+                        {% if p.state == "open" %}
+                            {% set ns.open = ns.open + 1 %}
+                        {% elif p.state == "closed" %}
+                            {% set ns.closed = ns.closed + 1 %}
+                        {% elif "filtered" in (p.state or "") %}
+                            {% set ns.filtered = ns.filtered + 1 %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="host-header">
+
+                        <div>
+
+                            <span class="host-label">
+                                Host
+                            </span>
+
+
+                            <div class="host-name">
+
+                                {{ host.hostname or host.host or "Unknown Host" }}
+
+
+                                {% if host.ip %}
+
+                                    <span class="host-ip">
+                                        ({{ host.ip }})
+                                    </span>
+
+                                {% elif host.host %}
+
+                                    <span class="host-ip">
+                                        ({{ host.host }})
+                                    </span>
+
+                                {% elif target %}
+
+                                    <span class="host-ip">
+                                        ({{ target }})
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="host-label">
+                            {{ ns.open }} Open •
+                            {{ ns.closed }} Closed •
+                            {{ ns.filtered }} Filtered
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="discovery-summary">
+                        <div class="discovery-stat open">
+                            <div class="discovery-stat-label">Open</div>
+                            <div class="discovery-stat-value">{{ ns.open }}</div>
+                        </div>
+                        <div class="discovery-stat closed">
+                            <div class="discovery-stat-label">Closed</div>
+                            <div class="discovery-stat-value">{{ ns.closed }}</div>
+                        </div>
+                        <div class="discovery-stat filtered">
+                            <div class="discovery-stat-label">Filtered</div>
+                            <div class="discovery-stat-value">{{ ns.filtered }}</div>
+                        </div>
+                        <div class="discovery-stat total">
+                            <div class="discovery-stat-label">Scanned</div>
+                            <div class="discovery-stat-value">{{ ns.total }}</div>
+                        </div>
+                    </div>
+
+                    <div class="scan-meta">
+                        <span class="scan-meta-badge">Profile: {{ host.scan_mode|default('accurate')|title }}</span>
+                        <span class="scan-meta-badge">Scan time: {{ host.scan_time|default(0) }}s</span>
+                        {% if host.port_filter %}<span class="scan-meta-badge">Ports: {{ host.port_filter }}</span>{% endif %}
+                    </div>
+
+                    {% if host.ports %}
+
+                    <div class="results-table-wrapper">
+
+                        <table class="results-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Port
+                                    </th>
+
+                                    <th>
+                                        Protocol
+                                    </th>
+
+                                    <th>
+                                        State
+                                    </th>
+
+                                    <th>
+                                        Service
+                                    </th>
+
+                                    <th>
+                                        Product
+                                    </th>
+
+                                    <th>
+                                        Version
+                                    </th>
+
+                                    <th>
+                                        Confidence
+                                    </th>
+
+                                    <th>
+                                        Severity
+                                    </th>
+
+                                    <th>
+                                        Risk Score
+                                    </th>
+
+                                    <th>
+                                        Evidence
+                                    </th>
+
+                                    <th>
+                                        Recommendation
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for port in host.ports %}
+
+                                <tr>
+
+
+                                    <!-- PORT -->
+
+                                    <td>
+
+                                        <span class="port-number">
+                                            {{ port.port }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- PROTOCOL -->
+
+                                    <td>
+
+                                        <span class="version-text">
+                                            {{ port.protocol or "tcp" }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- STATE -->
+
+                                    <td>
+
+                                        {% if port.state == "open" %}
+                                            <span class="state-open">open</span>
+                                        {% elif port.state == "closed" %}
+                                            <span class="state-closed">closed</span>
+                                        {% elif "filtered" in (port.state or "") %}
+                                            <span class="state-filtered">{{ port.state }}</span>
+                                        {% else %}
+                                            {{ port.state or "Unknown" }}
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- SERVICE -->
+
+                                    <td>
+
+                                        <span class="service-name">
+                                            {{ port.service or "Unknown" }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- PRODUCT -->
+
+                                    <td>
+
+                                        <span class="version-text">
+                                            {{ port.product or "Unknown" }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- VERSION -->
+
+                                    <td>
+
+                                        <span class="version-text">
+                                            {{ port.version or "Unknown" }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- CONFIDENCE -->
+
+                                    <td>
+
+                                        <span class="confidence-value">
+                                            {{ port.confidence or 0 }}%
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- SEVERITY -->
+
+                                    <td>
+
+                                        {% set severity =
+                                            port.severity or "Low"
+                                        %}
+
+                                        <span
+                                            class="
+                                                severity-badge
+                                                severity-{{ severity|lower }}
+                                            "
+                                        >
+                                            {{ severity }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- RISK SCORE -->
+
+                                    <td>
+
+                                        <span class="score-value">
+                                            {{ port.risk_score or 0 }}/10
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- EVIDENCE -->
+
+                                    <td>
+
+                                        <span class="evidence-text">
+                                            {{
+                                                port.evidence
+                                                or
+                                                "No evidence available."
+                                            }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- RECOMMENDATION -->
+
+                                    <td>
+
+                                        <span class="recommendation">
+
+                                            {{
+                                                port.recommendation
+                                                or
+                                                "Review this service and keep it updated."
+                                            }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    {% else %}
+
+                        <div class="no-open-ports">
+
+                            No port records were returned for this host.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+    </section>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="network-footer">
+
+        VectorSpy © 2026
+
+        <span>
+            Automated Cybersecurity Assessment Platform
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SCAN LOADING JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const form =
+            document.getElementById(
+                "networkScanForm"
+            );
+
+        const overlay =
+            document.getElementById(
+                "scanLoadingOverlay"
+            );
+
+        const targetInput =
+            document.getElementById(
+                "target"
+            );
+
+        const targetDisplay =
+            document.getElementById(
+                "scanTargetDisplay"
+            );
+
+        const statusText =
+            document.getElementById(
+                "scanStatusText"
+            );
+
+        const scanButton =
+            document.getElementById(
+                "scanButton"
+            );
+
+
+        if (
+            !form ||
+            !overlay ||
+            !targetInput
+        ) {
+            return;
+        }
+
+
+        form.addEventListener(
+            "submit",
+            function () {
+
+                const target =
+                    targetInput.value.trim();
+
+
+                if (!target) {
+                    return;
+                }
+
+
+                /*
+                 * Show loading overlay
+                 */
+
+                targetDisplay.textContent =
+                    target;
+
+                overlay.classList.add(
+                    "active"
+                );
+
+
+                /*
+                 * Disable button
+                 */
+
+                if (scanButton) {
+
+                    scanButton.disabled =
+                        true;
+
+                    scanButton.innerHTML =
+                        "Scanning...";
+
+                    scanButton.style.opacity =
+                        "0.65";
+
+                    scanButton.style.cursor =
+                        "not-allowed";
+
+                }
+
+
+                /*
+                 * Scan status messages
+                 */
+
+                const statuses = [
+
+                    "Initializing Nmap scanner...",
+
+                    "Validating target...",
+
+                    "Discovering target host...",
+
+                    "Scanning network ports...",
+
+                    "Detecting running services...",
+
+                    "Identifying service versions...",
+
+                    "Analyzing security risk...",
+
+                    "Preparing security findings..."
+
+                ];
+
+
+                let index = 0;
+
+
+                /*
+                 * Change status every 1.8 seconds
+                 */
+
+                const statusInterval =
+                    setInterval(
+                        function () {
+
+                            index++;
+
+                            if (
+                                index <
+                                statuses.length
+                            ) {
+
+                                statusText.textContent =
+                                    statuses[index];
+
+                            }
+
+                        },
+                        1800
+                    );
+
+
+                window.vectorSpyScanInterval =
+                    statusInterval;
+
+            }
+        );
+
+    }
+
+);
+
+</script>
+
+
+{% endblock %}

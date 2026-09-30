@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Account | VectorSpy</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(0, 217, 255, 0.08),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 80% 80%,
+                    rgba(0, 217, 255, 0.05),
+                    transparent 30%
+                ),
+                #071019;
+
+            color: #ffffff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 30px;
+
+        }
+
+
+        .signup-wrapper {
+
+            width: 100%;
+
+            max-width: 460px;
+
+        }
+
+
+        .brand {
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .brand-icon {
+
+            width: 62px;
+
+            height: 62px;
+
+            margin: 0 auto 15px;
+
+            border: 1px solid #00d9ff;
+
+            border-radius: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #00d9ff;
+
+            font-size: 27px;
+
+            box-shadow:
+                0 0 25px
+                rgba(0, 217, 255, 0.15);
+
+        }
+
+
+        .brand h1 {
+
+            font-size: 25px;
+
+            letter-spacing: 3px;
+
+        }
+
+
+        .brand p {
+
+            color: #7f98a8;
+
+            font-size: 13px;
+
+            margin-top: 7px;
+
+        }
+
+
+        .signup-card {
+
+            background:
+                rgba(10, 24, 34, 0.94);
+
+            border: 1px solid
+                rgba(0, 217, 255, 0.16);
+
+            border-radius: 18px;
+
+            padding: 34px;
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, 0.35);
+
+        }
+
+
+        .card-title {
+
+            font-size: 20px;
+
+            font-weight: 600;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .card-subtitle {
+
+            color: #718797;
+
+            font-size: 13px;
+
+            margin-bottom: 28px;
+
+        }
+
+
+        .error-message {
+
+            background:
+                rgba(255, 75, 75, 0.08);
+
+            border: 1px solid
+                rgba(255, 75, 75, 0.25);
+
+            color: #ff8c8c;
+
+            padding: 12px 14px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .input-group {
+
+            margin-bottom: 19px;
+
+        }
+
+
+        .input-group label {
+
+            display: block;
+
+            color: #a9bac5;
+
+            font-size: 12px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #00d9ff;
+
+            font-size: 14px;
+
+        }
+
+
+        .input-wrapper input {
+
+            width: 100%;
+
+            height: 48px;
+
+            padding:
+                0 14px 0 42px;
+
+            background: #07141d;
+
+            border: 1px solid #203541;
+
+            border-radius: 9px;
+
+            color: #ffffff;
+
+            outline: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .input-wrapper input:focus {
+
+            border-color: #00d9ff;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(0, 217, 255, 0.08);
+
+        }
+
+
+        .input-wrapper input::placeholder {
+
+            color: #506572;
+
+        }
+
+
+        .password-hint {
+
+            color: #5e7480;
+
+            font-size: 10px;
+
+            margin-top: 7px;
+
+        }
+
+
+        .signup-btn {
+
+            width: 100%;
+
+            height: 49px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #00d9ff;
+
+            color: #031018;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            transition: 0.2s;
+
+            margin-top: 4px;
+
+        }
+
+
+        .signup-btn:hover {
+
+            background: #38e2ff;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 217, 255, 0.18);
+
+            transform: translateY(-1px);
+
+        }
+
+
+        .login-area {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            padding-top: 22px;
+
+            border-top: 1px solid
+                rgba(255, 255, 255, 0.06);
+
+            color: #6f8490;
+
+            font-size: 13px;
+
+        }
+
+
+        .login-area a {
+
+            color: #00d9ff;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            margin-left: 5px;
+
+        }
+
+
+        .login-area a:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        .security-note {
+
+            margin-top: 22px;
+
+            padding: 12px;
+
+            background:
+                rgba(0, 217, 255, 0.035);
+
+            border: 1px solid
+                rgba(0, 217, 255, 0.08);
+
+            border-radius: 9px;
+
+            color: #607784;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
+            text-align: center;
+
+        }
+
+
+        .footer {
+
+            text-align: center;
+
+            color: #465b67;
+
+            font-size: 10px;
+
+            margin-top: 20px;
+
+        }
+
+
+        @media (max-width: 520px) {
+
+            body {
+
+                padding: 18px;
+
+            }
+
+
+            .signup-card {
+
+                padding: 25px 20px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="signup-wrapper">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ◈
+        </div>
+
+        <h1>VECTORSPY</h1>
+
+        <p>
+            Automated Cybersecurity Assessment Platform
+        </p>
+
+    </div>
+
+
+    <!-- SIGNUP CARD -->
+
+    <div class="signup-card">
+
+        <div class="card-title">
+            Create Account
+        </div>
+
+        <div class="card-subtitle">
+            Create your VectorSpy security assessment account
+        </div>
+
+
+        {% if error %}
+
+        <div class="error-message">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            action="/signup"
+        >
+
+
+            <!-- USERNAME -->
+
+            <div class="input-group">
+
+                <label for="name">
+                    Username
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        ◉
+                    </span>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Choose a username"
+                        autocomplete="username"
+                        minlength="3"
+                        maxlength="50"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="input-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        ◈
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                    >
+
+                </div>
+
+                <div class="password-hint">
+                    Minimum 8 characters
+                </div>
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="input-group">
+
+                <label for="confirm_password">
+                    Confirm Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        ◈
+                    </span>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Confirm your password"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CREATE -->
+
+            <button
+                type="submit"
+                class="signup-btn"
+            >
+
+                CREATE ACCOUNT
+                <span>→</span>
+
+            </button>
+
+        </form>
+
+
+        <!-- LOGIN -->
+
+        <div class="login-area">
+
+            Already have an account?
+
+            <a href="/login">
+                Sign In
+            </a>
+
+        </div>
+
+
+        <!-- SECURITY -->
+
+        <div class="security-note">
+
+            🔒 Your password will be securely hashed
+            before it is stored in the VectorSpy database.
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        VectorSpy © 2026 · Cybersecurity Assessment Platform
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

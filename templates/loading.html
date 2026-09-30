@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        VectorSpy | Loading
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+
+        /* =========================================================
+           VECTORSPY LOADING SCREEN
+           Professional Cybersecurity Interface
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            width: 100%;
+            min-height: 100%;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 50% 38%,
+                    rgba(0, 217, 255, 0.075),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(0, 120, 160, 0.045),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #040b12,
+                    #07141e 52%,
+                    #040b12
+                );
+
+            color: #e8f7ff;
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================================
+           MAIN CONTAINER
+           ========================================================= */
+
+        .loading-container {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            position: relative;
+
+            padding: 30px 20px;
+        }
+
+
+        /* =========================================================
+           BACKGROUND GRID
+           ========================================================= */
+
+        .loading-container::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 217, 255, 0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 217, 255, 0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            mask-image:
+                radial-gradient(
+                    circle at center,
+                    black,
+                    transparent 72%
+                );
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           SCAN LINE
+           ========================================================= */
+
+        .loading-container::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 1px;
+
+            top: 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(0, 217, 255, 0.22),
+                    transparent
+                );
+
+            animation:
+                scanLine 5s linear infinite;
+
+            pointer-events: none;
+        }
+
+
+        @keyframes scanLine {
+
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+
+        }
+
+
+        /* =========================================================
+           LOADING CONTENT
+           ========================================================= */
+
+        .loading-content {
+
+            width: 100%;
+
+            max-width: 620px;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =========================================================
+           LOGO AREA
+           ========================================================= */
+
+        .logo-wrapper {
+
+            width: 190px;
+
+            height: 190px;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin: 0 auto 14px;
+        }
+
+
+        /* OUTER ROTATING RING */
+
+        .scan-ring {
+
+            position: absolute;
+
+            width: 170px;
+
+            height: 170px;
+
+            border-radius: 50%;
+
+            border:
+                2px solid
+                transparent;
+
+            border-top-color:
+                #00d9ff;
+
+            border-right-color:
+                rgba(0, 217, 255, 0.45);
+
+            animation:
+                loadingRotate 3.2s linear infinite;
+
+            filter:
+                drop-shadow(
+                    0 0 8px
+                    rgba(0, 217, 255, 0.55)
+                );
+        }
+
+
+        /* SECOND RING */
+
+        .logo-wrapper::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 148px;
+
+            height: 148px;
+
+            border-radius: 50%;
+
+            border:
+                1px dashed
+                rgba(0, 217, 255, 0.24);
+
+            animation:
+                loadingRotateReverse 7s linear infinite;
+        }
+
+
+        /* THIRD SMALL RING */
+
+        .logo-wrapper::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 118px;
+
+            height: 118px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(0, 217, 255, 0.08);
+
+            box-shadow:
+                0 0 20px
+                rgba(0, 217, 255, 0.06);
+
+            animation:
+                pulseRing 2.2s ease-in-out infinite;
+        }
+
+
+        @keyframes loadingRotate {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @keyframes loadingRotateReverse {
+
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+
+        }
+
+
+        @keyframes pulseRing {
+
+            0%,
+            100% {
+                transform: scale(0.96);
+
+                opacity: 0.45;
+            }
+
+            50% {
+                transform: scale(1.04);
+
+                opacity: 0.9;
+            }
+
+        }
+
+
+        /* =========================================================
+           LOGO
+           ========================================================= */
+
+        .loading-logo {
+
+            width: 118px;
+
+            height: auto;
+
+            object-fit: contain;
+
+            position: relative;
+
+            z-index: 5;
+
+            filter:
+                drop-shadow(
+                    0 0 18px
+                    rgba(0, 217, 255, 0.25)
+                );
+
+            animation:
+                logoPulse 2.5s ease-in-out infinite;
+        }
+
+
+        @keyframes logoPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.025);
+            }
+
+        }
+
+
+        /* =========================================================
+           BRAND
+           ========================================================= */
+
+        .brand-name {
+
+            color: #00d9ff;
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+            letter-spacing: 4px;
+
+            margin-top: -3px;
+        }
+
+
+        .brand-line {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-top: 8px;
+
+            color: #627e8d;
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .brand-dot {
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #35d87c;
+
+            box-shadow:
+                0 0 8px
+                rgba(53, 216, 124, 0.6);
+
+            animation:
+                statusPulse 1.5s ease-in-out infinite;
+        }
+
+
+        @keyframes statusPulse {
+
+            0%,
+            100% {
+                opacity: 0.45;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+        }
+
+
+        /* =========================================================
+           DIVIDER
+           ========================================================= */
+
+        .loading-divider {
+
+            width: 100%;
+
+            max-width: 450px;
+
+            height: 1px;
+
+            margin: 25px auto 20px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #1d4051,
+                    transparent
+                );
+        }
+
+
+        /* =========================================================
+           SUBTITLE
+           ========================================================= */
+
+        .subtitle {
+
+            margin: 0;
+
+            color: #a9bec9;
+
+            font-size: 12px;
+
+            letter-spacing: 0.2px;
+        }
+
+
+        /* =========================================================
+           STATUS
+           ========================================================= */
+
+        .status-box {
+
+            margin: 18px auto 20px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 9px 15px;
+
+            background:
+                rgba(0, 217, 255, 0.045);
+
+            border:
+                1px solid
+                rgba(0, 217, 255, 0.14);
+
+            border-radius: 6px;
+        }
+
+
+        .status-indicator {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #00d9ff;
+
+            box-shadow:
+                0 0 9px
+                rgba(0, 217, 255, 0.7);
+
+            animation:
+                statusPulse 1s ease-in-out infinite;
+        }
+
+
+        #status {
+
+            margin: 0;
+
+            color: #d7e8ef;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            letter-spacing: 0.2px;
+        }
+
+
+        /* =========================================================
+           LOADING STEPS
+           ========================================================= */
+
+        .steps {
+
+            width: 100%;
+
+            max-width: 470px;
+
+            margin: 0 auto;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+        }
+
+
+        .loading-step {
+
+            margin: 0;
+
+            padding: 11px 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 6px;
+
+            background:
+                #081720;
+
+            border:
+                1px solid
+                #153241;
+
+            border-radius: 6px;
+
+            color: #718a99;
+
+            font-size: 9px;
+
+            transition:
+                border-color 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        .loading-step:hover {
+
+            border-color: #255064;
+
+            color: #a4b9c4;
+        }
+
+
+        .loading-step span {
+
+            width: 16px;
+
+            height: 16px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                rgba(53, 216, 124, 0.08);
+
+            border:
+                1px solid
+                rgba(53, 216, 124, 0.18);
+
+            color: #55d987;
+
+            font-size: 8px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           ASYNCHRONOUS LOADING
+           ========================================================= */
+
+        .async {
+
+            margin: 22px 0 0;
+
+            color: #526d7b;
+
+            font-size: 9px;
+
+            letter-spacing: 1.2px;
+
+            text-transform: uppercase;
+        }
+
+
+        .dots::after {
+
+            content: "";
+
+            display: inline-block;
+
+            width: 18px;
+
+            text-align: left;
+
+            animation:
+                loadingDots 1.4s infinite;
+        }
+
+
+        @keyframes loadingDots {
+
+            0% {
+                content: "";
+            }
+
+            25% {
+                content: ".";
+            }
+
+            50% {
+                content: "..";
+            }
+
+            75% {
+                content: "...";
+            }
+
+            100% {
+                content: "";
+            }
+
+        }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .loading-footer {
+
+            position: absolute;
+
+            bottom: 20px;
+
+            left: 0;
+
+            width: 100%;
+
+            text-align: center;
+
+            color: #405966;
+
+            font-size: 8px;
+
+            letter-spacing: 0.4px;
+
+            z-index: 3;
+        }
+
+
+        .loading-footer span {
+
+            color: #007d96;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 650px) {
+
+            .logo-wrapper {
+
+                width: 165px;
+
+                height: 165px;
+            }
+
+
+            .scan-ring {
+
+                width: 148px;
+
+                height: 148px;
+            }
+
+
+            .logo-wrapper::before {
+
+                width: 130px;
+
+                height: 130px;
+            }
+
+
+            .logo-wrapper::after {
+
+                width: 104px;
+
+                height: 104px;
+            }
+
+
+            .loading-logo {
+
+                width: 105px;
+            }
+
+
+            .steps {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .loading-step {
+
+                justify-content: flex-start;
+
+                padding-left: 15px;
+            }
+
+        }
+
+
+        @media (max-width: 420px) {
+
+            .loading-container {
+
+                padding: 20px 15px;
+            }
+
+
+            .brand-name {
+
+                font-size: 18px;
+
+                letter-spacing: 3px;
+            }
+
+
+            .subtitle {
+
+                font-size: 10px;
+            }
+
+
+            .loading-divider {
+
+                margin-top: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="loading-container">
+
+
+    <div class="loading-content">
+
+
+        <!-- =====================================================
+             LOGO
+        ====================================================== -->
+
+        <div class="logo-wrapper">
+
+            <div class="scan-ring"></div>
+
+            <img
+                src="{{ url_for('static', filename='images/VectorSpy-logo.png') }}"
+                class="loading-logo"
+                alt="VectorSpy Logo"
+            >
+
+        </div>
+
+
+
+        <!-- BRAND -->
+
+        <div class="brand-name">
+            VECTORSPY
+        </div>
+
+
+        <div class="brand-line">
+
+            <span class="brand-dot"></span>
+
+            Automated Security Assessment
+
+        </div>
+
+
+
+        <!-- DIVIDER -->
+
+        <div class="loading-divider"></div>
+
+
+
+        <!-- SUBTITLE -->
+
+        <p class="subtitle">
+
+            Automated Cybersecurity Assessment Platform
+
+        </p>
+
+
+
+        <!-- STATUS -->
+
+        <div class="status-box">
+
+            <span class="status-indicator"></span>
+
+            <h3 id="status">
+                Initializing Security Modules...
+            </h3>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             STEPS
+        ====================================================== -->
+
+        <div class="steps">
+
+
+            <p class="loading-step">
+
+                <span>
+                    ✓
+                </span>
+
+                Loading Platform
+
+            </p>
+
+
+            <p class="loading-step">
+
+                <span>
+                    ✓
+                </span>
+
+                Initializing Database
+
+            </p>
+
+
+            <p class="loading-step">
+
+                <span>
+                    ✓
+                </span>
+
+                Preparing Assessment Engine
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- ASYNC -->
+
+        <p class="async">
+
+            Asynchronous Loading<span class="dots"></span>
+
+        </p>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="loading-footer">
+
+        VectorSpy © 2026
+
+        <span>
+            • Automated Cybersecurity Assessment Platform
+        </span>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     EXISTING LOADING JAVASCRIPT
+     ========================================================= -->
+
+<script
+    src="{{ url_for('static', filename='js/loading.js') }}">
+</script>
+
+
+</body>
+
+</html>

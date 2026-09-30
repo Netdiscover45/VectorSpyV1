@@ -1,0 +1,1001 @@
+{% extends "base.html" %}
+
+{% block title %}VectorSpy | Profile{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =====================================================
+       VECTORSPY PROFILE PAGE
+       ===================================================== */
+
+    .profile-page {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-bottom: 30px;
+    }
+
+
+    /* =====================================================
+       PROFILE HERO
+       ===================================================== */
+
+    .profile-hero {
+        position: relative;
+
+        display: flex;
+        align-items: center;
+
+        gap: 24px;
+
+        padding: 28px;
+
+        margin-bottom: 20px;
+
+        background:
+            linear-gradient(
+                145deg,
+                #081b27,
+                #07151f
+            );
+
+        border: 1px solid #183b4c;
+
+        border-radius: 12px;
+
+        overflow: hidden;
+
+        box-shadow:
+            0 15px 40px rgba(0, 0, 0, 0.18);
+    }
+
+
+    .profile-hero::before {
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 2px;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                #00d9ff,
+                transparent
+            );
+    }
+
+
+    .profile-hero::after {
+        content: "";
+
+        position: absolute;
+
+        width: 220px;
+        height: 220px;
+
+        right: -120px;
+        top: -120px;
+
+        border-radius: 50%;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(0, 217, 255, 0.07),
+                transparent 70%
+            );
+    }
+
+
+    /* =====================================================
+       AVATAR
+       ===================================================== */
+
+    .profile-avatar-wrapper {
+        position: relative;
+
+        width: 105px;
+        height: 105px;
+
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .profile-avatar-wrapper::before {
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        border-radius: 50%;
+
+        border: 2px solid transparent;
+
+        border-top-color: #00d9ff;
+
+        border-right-color:
+            rgba(0, 217, 255, 0.35);
+
+        animation:
+            profileRotate 4s linear infinite;
+
+        filter:
+            drop-shadow(
+                0 0 7px
+                rgba(0, 217, 255, 0.35)
+            );
+    }
+
+
+    .profile-avatar-wrapper::after {
+        content: "";
+
+        position: absolute;
+
+        width: 91px;
+        height: 91px;
+
+        border-radius: 50%;
+
+        border: 1px dashed
+            rgba(0, 217, 255, 0.18);
+
+        animation:
+            profileRotateReverse 8s linear infinite;
+    }
+
+
+    @keyframes profileRotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+
+    @keyframes profileRotateReverse {
+        from {
+            transform: rotate(360deg);
+        }
+
+        to {
+            transform: rotate(0deg);
+        }
+    }
+
+
+    .profile-avatar {
+        position: relative;
+
+        z-index: 2;
+
+        width: 73px;
+        height: 73px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background:
+            linear-gradient(
+                145deg,
+                #0d3445,
+                #09202d
+            );
+
+        border: 1px solid #28586d;
+
+        color: #00d9ff;
+
+        font-size: 26px;
+
+        font-weight: 700;
+
+        box-shadow:
+            0 0 25px
+            rgba(0, 217, 255, 0.08);
+    }
+
+
+    /* =====================================================
+       HERO INFORMATION
+       ===================================================== */
+
+    .profile-hero-info {
+        position: relative;
+        z-index: 2;
+    }
+
+
+    .profile-hero-info h2 {
+        margin: 0 0 7px;
+
+        color: #edf8fc;
+
+        font-size: 23px;
+
+        font-weight: 700;
+    }
+
+
+    .profile-hero-info p {
+        margin: 0;
+
+        color: #718b9b;
+
+        font-size: 11px;
+    }
+
+
+    .profile-status {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        margin-top: 12px;
+
+        padding: 5px 9px;
+
+        background:
+            rgba(53, 216, 124, 0.05);
+
+        border:
+            1px solid
+            rgba(53, 216, 124, 0.16);
+
+        border-radius: 5px;
+
+        color: #65cb8e;
+
+        font-size: 8px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.7px;
+    }
+
+
+    .profile-status-dot {
+        width: 6px;
+        height: 6px;
+
+        border-radius: 50%;
+
+        background: #3fd17a;
+
+        box-shadow:
+            0 0 8px
+            rgba(63, 209, 122, 0.55);
+    }
+
+
+    /* =====================================================
+       PROFILE GRID
+       ===================================================== */
+
+    .profile-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 18px;
+    }
+
+
+    .profile-card {
+        background: #081823;
+
+        border: 1px solid #173747;
+
+        border-radius: 10px;
+
+        padding: 21px;
+
+        transition:
+            border-color 0.2s ease,
+            transform 0.2s ease;
+    }
+
+
+    .profile-card:hover {
+        border-color: #245468;
+
+        transform:
+            translateY(-1px);
+    }
+
+
+    .profile-card-header {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 18px;
+    }
+
+
+    .profile-card-header h3 {
+        margin: 0;
+
+        color: #dcebf1;
+
+        font-size: 13px;
+
+        font-weight: 600;
+    }
+
+
+    .profile-card-header span {
+        color: #00b9d9;
+
+        font-size: 8px;
+
+        font-weight: 600;
+
+        letter-spacing: 0.7px;
+    }
+
+
+    /* =====================================================
+       INFORMATION ROW
+       ===================================================== */
+
+    .profile-info-row {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        padding: 12px 0;
+
+        border-bottom:
+            1px solid #112c39;
+    }
+
+
+    .profile-info-row:first-child {
+        padding-top: 0;
+    }
+
+
+    .profile-info-row:last-child {
+        padding-bottom: 0;
+
+        border-bottom: none;
+    }
+
+
+    .profile-label {
+        color: #627d8b;
+
+        font-size: 10px;
+    }
+
+
+    .profile-value {
+        color: #cfe0e7;
+
+        font-size: 10px;
+
+        font-weight: 600;
+
+        text-align: right;
+    }
+
+
+    .profile-value.cyan {
+        color: #00c8e8;
+    }
+
+
+    .profile-value.active {
+        color: #55cf87;
+    }
+
+
+    /* =====================================================
+       SECURITY ACCESS
+       ===================================================== */
+
+    .access-card {
+        grid-column: 1 / -1;
+    }
+
+
+    .access-list {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+
+    .access-item {
+        padding: 15px;
+
+        background: #07131c;
+
+        border: 1px solid #153544;
+
+        border-radius: 7px;
+    }
+
+
+    .access-item strong {
+        display: block;
+
+        margin-bottom: 6px;
+
+        color: #c5d8df;
+
+        font-size: 10px;
+    }
+
+
+    .access-item span {
+        color: #617d8b;
+
+        font-size: 9px;
+
+        line-height: 1.5;
+    }
+
+
+    .access-badge {
+        display: inline-block;
+
+        margin-top: 11px;
+
+        padding: 4px 7px;
+
+        border-radius: 4px;
+
+        background:
+            rgba(0, 217, 255, 0.05);
+
+        border:
+            1px solid
+            rgba(0, 217, 255, 0.13);
+
+        color: #00b9d9;
+
+        font-size: 7px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+    }
+
+
+    /* =====================================================
+       ACTION BUTTONS
+       ===================================================== */
+
+    .profile-actions {
+        display: flex;
+
+        justify-content: flex-end;
+
+        gap: 10px;
+
+        margin-top: 20px;
+    }
+
+
+    .profile-btn {
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        min-width: 125px;
+
+        height: 38px;
+
+        padding: 0 16px;
+
+        border-radius: 6px;
+
+        text-decoration: none;
+
+        font-size: 10px;
+
+        font-weight: 600;
+
+        transition:
+            all 0.2s ease;
+    }
+
+
+    .dashboard-btn {
+        color: #9db6c2;
+
+        background: #0a1b25;
+
+        border: 1px solid #214251;
+    }
+
+
+    .dashboard-btn:hover {
+        color: #00d9ff;
+
+        border-color: #00aeca;
+    }
+
+
+    .logout-btn {
+        color: #061219;
+
+        background: #00d9ff;
+
+        border: 1px solid #00d9ff;
+    }
+
+
+    .logout-btn:hover {
+        background: #20defd;
+
+        box-shadow:
+            0 6px 20px
+            rgba(0, 217, 255, 0.18);
+    }
+
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .profile-footer {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-top: 35px;
+
+        padding: 15px 3px;
+
+        border-top:
+            1px solid #142e3b;
+
+        color: #526d7a;
+
+        font-size: 8px;
+    }
+
+
+    .profile-footer span {
+        color: #657f8c;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @media (max-width: 800px) {
+
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+
+
+        .access-card {
+            grid-column: auto;
+        }
+
+
+        .access-list {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 560px) {
+
+        .profile-hero {
+            flex-direction: column;
+
+            text-align: center;
+
+            padding: 24px 18px;
+        }
+
+
+        .profile-hero-info h2 {
+            font-size: 20px;
+        }
+
+
+        .profile-actions {
+            flex-direction: column;
+        }
+
+
+        .profile-btn {
+            width: 100%;
+        }
+
+
+        .profile-footer {
+            flex-direction: column;
+
+            gap: 7px;
+
+            text-align: center;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="profile-page">
+
+
+    <!-- =====================================================
+         TOP HEADER
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <div>
+
+            <h1>
+                Profile
+            </h1>
+
+            <p class="page-subtitle">
+                Account and security assessment information
+            </p>
+
+        </div>
+
+
+        <div class="user-box">
+
+            <span class="user-icon">
+                {{ name[0] | upper }}
+            </span>
+
+            <span>
+                Welcome, {{ name }}
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         PROFILE HERO
+         ===================================================== -->
+
+    <section class="profile-hero">
+
+
+        <div class="profile-avatar-wrapper">
+
+            <div class="profile-avatar">
+                {{ name[0] | upper }}
+            </div>
+
+        </div>
+
+
+        <div class="profile-hero-info">
+
+            <h2>
+                {{ name }}
+            </h2>
+
+            <p>
+                VectorSpy Security Assessment User
+            </p>
+
+
+            <div class="profile-status">
+
+                <span class="profile-status-dot"></span>
+
+                Active Session
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PROFILE INFORMATION
+         ===================================================== -->
+
+    <div class="profile-grid">
+
+
+        <!-- ACCOUNT INFORMATION -->
+
+        <section class="profile-card">
+
+            <div class="profile-card-header">
+
+                <h3>
+                    Account Information
+                </h3>
+
+                <span>
+                    ACCOUNT
+                </span>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    Name
+                </span>
+
+                <span class="profile-value">
+                    {{ name }}
+                </span>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    Account Type
+                </span>
+
+                <span class="profile-value">
+                    Security Assessor
+                </span>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    Platform
+                </span>
+
+                <span class="profile-value cyan">
+                    VectorSpy
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SESSION INFORMATION -->
+
+        <section class="profile-card">
+
+            <div class="profile-card-header">
+
+                <h3>
+                    Session Information
+                </h3>
+
+                <span>
+                    SESSION
+                </span>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    Session Status
+                </span>
+
+                <span class="profile-value active">
+                    Active
+                </span>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    Authentication
+                </span>
+
+                <span class="profile-value">
+                    Password
+                </span>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    Access Level
+                </span>
+
+                <span class="profile-value">
+                    Authorized
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SECURITY ACCESS -->
+
+        <section class="profile-card access-card">
+
+            <div class="profile-card-header">
+
+                <h3>
+                    Security Assessment Access
+                </h3>
+
+                <span>
+                    V1
+                </span>
+
+            </div>
+
+
+            <div class="access-list">
+
+
+                <div class="access-item">
+
+                    <strong>
+                        Network Assessment
+                    </strong>
+
+                    <span>
+                        Nmap-based network reconnaissance
+                        and service discovery.
+                    </span>
+
+                    <span class="access-badge">
+                        Available
+                    </span>
+
+                </div>
+
+
+                <div class="access-item">
+
+                    <strong>
+                        Web Security
+                    </strong>
+
+                    <span>
+                        Basic web security checks
+                        and security analysis.
+                    </span>
+
+                    <span class="access-badge">
+                        Available
+                    </span>
+
+                </div>
+
+
+                <div class="access-item">
+
+                    <strong>
+                        Technology Finder
+                    </strong>
+
+                    <span>
+                        Detect technologies, versions
+                        and related risks.
+                    </span>
+
+                    <span class="access-badge">
+                        Available
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ACTIONS
+         ===================================================== -->
+
+    <div class="profile-actions">
+
+        <a
+            href="/dashboard"
+            class="profile-btn dashboard-btn"
+        >
+            ← Dashboard
+        </a>
+
+
+        <a
+            href="/logout"
+            class="profile-btn logout-btn"
+        >
+            Logout →
+        </a>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="profile-footer">
+
+        <div>
+            VectorSpy © 2026
+        </div>
+
+        <span>
+            Automated Cybersecurity Assessment Platform
+        </span>
+
+    </footer>
+
+
+</div>
+
+{% endblock %}

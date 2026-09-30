@@ -1,0 +1,847 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .reports-page {
+        padding: 6px 0 30px 0;
+    }
+
+    .report-header {
+        background: #071f29;
+        border: 1px solid #0b5267;
+        border-radius: 10px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 84px;
+        box-sizing: border-box;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .report-header::after {
+        content: "";
+        position: absolute;
+        right: -10px;
+        top: -35px;
+        width: 190px;
+        height: 150px;
+        border: 1px solid rgba(0, 217, 255, 0.16);
+        transform: rotate(35deg);
+        pointer-events: none;
+    }
+
+    .report-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .report-icon {
+        width: 42px;
+        height: 42px;
+        border: 1px solid #00d9ff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #00d9ff;
+        font-size: 20px;
+        background: #082d3a;
+        box-shadow: 0 0 12px rgba(0, 217, 255, 0.08);
+    }
+
+    .report-title {
+        margin: 0;
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .report-subtitle {
+        margin: 4px 0 0 0;
+        color: #76b7c8;
+        font-size: 11px;
+    }
+
+    .report-status {
+        position: relative;
+        z-index: 1;
+        border: 1px solid #0b6177;
+        background: #092d39;
+        color: #bdeaf3;
+        border-radius: 16px;
+        padding: 7px 12px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+    .report-status::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #00d9ff;
+        margin-right: 7px;
+        box-shadow: 0 0 7px rgba(0, 217, 255, 0.7);
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .summary-card {
+        background: #071f29;
+        border: 1px solid #0b5267;
+        border-radius: 8px;
+        padding: 12px 14px;
+        min-height: 64px;
+        box-sizing: border-box;
+    }
+
+    .summary-label {
+        color: #679eae;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        margin-bottom: 4px;
+    }
+
+    .summary-value {
+        color: #ffffff;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .summary-icon {
+        float: left;
+        width: 28px;
+        height: 28px;
+        margin-right: 9px;
+        margin-top: 1px;
+        border-radius: 6px;
+        border: 1px solid #0b5267;
+        background: #092e3b;
+        color: #00d9ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+    }
+
+    .report-panel {
+        margin-top: 14px;
+        background: #061b24;
+        border: 1px solid #0b5267;
+        border-radius: 9px;
+        overflow: hidden;
+    }
+
+    .report-panel-header {
+        min-height: 56px;
+        background: #072732;
+        border-bottom: 1px solid #0b5267;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        box-sizing: border-box;
+        gap: 12px;
+    }
+
+    .panel-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .panel-icon {
+        color: #00d9ff;
+        font-size: 15px;
+    }
+
+    .panel-title {
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .panel-subtitle {
+        color: #6298a8;
+        font-size: 9px;
+        margin-top: 2px;
+    }
+
+    .panel-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .finding-count {
+        color: #00d9ff;
+        border: 1px solid #0b6177;
+        background: #092d39;
+        border-radius: 5px;
+        padding: 5px 9px;
+        font-size: 9px;
+    }
+
+    .pdf-button,
+    .print-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+        padding: 0 11px;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        box-sizing: border-box;
+    }
+
+    .pdf-button {
+        border: 1px solid #17637a;
+        background: #073342;
+        color: #00d9ff;
+    }
+
+    .pdf-button:hover {
+        background: #0a4658;
+    }
+
+    .print-button {
+        border: 1px solid #17637a;
+        background: #073342;
+        color: #9ddce9;
+    }
+
+    .print-button:hover {
+        background: #0a4658;
+        color: #ffffff;
+    }
+
+    .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .reports-table {
+        width: 100%;
+        min-width: 1280px;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .reports-table th {
+        height: 28px;
+        background: #061720;
+        color: #6ba2b2;
+        font-size: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        font-weight: 600;
+        text-align: left;
+        padding: 0 8px;
+        border-bottom: 1px solid #0b5267;
+    }
+
+    .reports-table td {
+        color: #b8d0d8;
+        font-size: 9px;
+        line-height: 13px;
+        padding: 8px;
+        border-bottom: 1px solid rgba(11, 82, 103, 0.58);
+        vertical-align: top;
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .reports-table tbody tr:hover {
+        background: rgba(0, 217, 255, 0.025);
+    }
+
+    .reports-table th:nth-child(1),
+    .reports-table td:nth-child(1) {
+        width: 34px;
+    }
+
+    .reports-table th:nth-child(2),
+    .reports-table td:nth-child(2) {
+        width: 90px;
+    }
+
+    .reports-table th:nth-child(3),
+    .reports-table td:nth-child(3) {
+        width: 125px;
+    }
+
+    .reports-table th:nth-child(4),
+    .reports-table td:nth-child(4) {
+        width: 190px;
+    }
+
+    .reports-table th:nth-child(5),
+    .reports-table td:nth-child(5) {
+        width: 82px;
+    }
+
+    .reports-table th:nth-child(6),
+    .reports-table td:nth-child(6) {
+        width: 75px;
+    }
+
+    .reports-table th:nth-child(7),
+    .reports-table td:nth-child(7) {
+        width: 210px;
+    }
+
+    .reports-table th:nth-child(8),
+    .reports-table td:nth-child(8) {
+        width: 250px;
+    }
+
+    .reports-table th:nth-child(9),
+    .reports-table td:nth-child(9) {
+        width: 95px;
+    }
+
+    .id-text {
+        color: #5d91a1;
+        font-size: 8px;
+    }
+
+    .source-badge {
+        display: inline-block;
+        border: 1px solid #17637a;
+        background: #092e3b;
+        color: #00d9ff;
+        border-radius: 5px;
+        padding: 4px 7px;
+        font-size: 8px;
+        white-space: nowrap;
+    }
+
+    .target-name {
+        color: #c5e5ec;
+        font-weight: 600;
+        display: block;
+    }
+
+    .target-ip {
+        display: block;
+        margin-top: 4px;
+        color: #5eaabd;
+        font-size: 8px;
+        font-weight: 500;
+    }
+
+    .finding-name {
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    .severity-badge {
+        display: inline-block;
+        border-radius: 5px;
+        padding: 3px 7px;
+        font-size: 8px;
+        font-weight: 600;
+    }
+
+    .severity-critical {
+        color: #ffb4b4;
+        background: #461f25;
+        border: 1px solid #8c343d;
+    }
+
+    .severity-high {
+        color: #ffb19a;
+        background: #46251c;
+        border: 1px solid #9b402a;
+    }
+
+    .severity-medium {
+        color: #f2d27a;
+        background: #413719;
+        border: 1px solid #7e681e;
+    }
+
+    .severity-low {
+        color: #76e6c5;
+        background: #0d3c35;
+        border: 1px solid #176c5d;
+    }
+
+    .risk-score {
+        color: #d7f6fb;
+        font-weight: 700;
+        font-size: 9px;
+    }
+
+    .risk-track {
+        width: 44px;
+        height: 3px;
+        margin-top: 4px;
+        background: #12343e;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .risk-fill {
+        height: 100%;
+        background: #00d9ff;
+        border-radius: 3px;
+    }
+
+    .risk-fill-score-0 { width: 0%; }
+    .risk-fill-score-1 { width: 10%; }
+    .risk-fill-score-2 { width: 20%; }
+    .risk-fill-score-3 { width: 30%; }
+    .risk-fill-score-4 { width: 40%; }
+    .risk-fill-score-5 { width: 50%; }
+    .risk-fill-score-6 { width: 60%; }
+    .risk-fill-score-7 { width: 70%; }
+    .risk-fill-score-8 { width: 80%; }
+    .risk-fill-score-9 { width: 90%; }
+    .risk-fill-score-10 { width: 100%; }
+
+    .evidence-text {
+        color: #80aeb9;
+    }
+
+    .recommendation-text {
+        color: #8db8c3;
+    }
+
+    .date-text {
+        color: #5f93a1;
+        font-size: 8px;
+        white-space: nowrap;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 55px 20px;
+        color: #668f9b;
+        font-size: 12px;
+    }
+
+    @media (max-width: 1000px) {
+        .summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .report-header {
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .report-status {
+            margin-top: 2px;
+        }
+    }
+
+    @media (max-width: 650px) {
+        .summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .report-header {
+            flex-direction: column;
+        }
+
+        .report-panel-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .panel-actions {
+            width: 100%;
+            flex-wrap: wrap;
+        }
+    }
+
+    @media print {
+        .sidebar,
+        .topbar,
+        .pdf-button,
+        .print-button,
+        .report-status {
+            display: none !important;
+        }
+
+        .main-content,
+        .content,
+        .reports-page {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+
+        .report-panel,
+        .report-header,
+        .summary-card {
+            border-color: #999 !important;
+        }
+
+        .reports-table {
+            min-width: 0 !important;
+        }
+    }
+</style>
+
+
+<div class="reports-page">
+
+    <!-- ========================================================= -->
+    <!-- HEADER -->
+    <!-- ========================================================= -->
+
+    <div class="report-header">
+
+        <div class="report-title-wrap">
+
+            <div class="report-icon">◇</div>
+
+            <div>
+
+                <h1 class="report-title">
+                    Security Reports
+                </h1>
+
+                <p class="report-subtitle">
+                    Centralized security assessment reports from VectorSpy scans
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="report-status">
+            Security Assessment Data
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- SUMMARY CARDS -->
+    <!-- ========================================================= -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                ◇
+            </div>
+
+            <div class="summary-label">
+                Total Findings
+            </div>
+
+            <div class="summary-value">
+                {{ total_findings }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                !
+            </div>
+
+            <div class="summary-label">
+                Critical
+            </div>
+
+            <div class="summary-value">
+                {{ critical_count }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                ▲
+            </div>
+
+            <div class="summary-label">
+                High
+            </div>
+
+            <div class="summary-value">
+                {{ high_count }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                ▫
+            </div>
+
+            <div class="summary-label">
+                Other Findings
+            </div>
+
+            <div class="summary-value">
+                {{ medium_count + low_count }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- REPORT TABLE -->
+    <!-- ========================================================= -->
+
+    <div class="report-panel">
+
+        <div class="report-panel-header">
+
+            <div class="panel-title-wrap">
+
+                <div class="panel-icon">
+                    ▦
+                </div>
+
+                <div>
+
+                    <div class="panel-title">
+                        Security Assessment Report
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Findings collected from Network, Web Security and Technology Finder scans
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel-actions">
+
+                <span class="finding-count">
+                    {{ total_findings }} Findings
+                </span>
+
+
+                <a
+                    href="/reports/pdf"
+                    class="pdf-button"
+                >
+                    📄 Download PDF
+                </a>
+
+
+                <button
+                    type="button"
+                    class="print-button"
+                    onclick="window.print()"
+                >
+                    🖨 Print
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            {% if findings %}
+
+            <table class="reports-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Source</th>
+
+                        <th>Target</th>
+
+                        <th>Finding</th>
+
+                        <th>Severity</th>
+
+                        <th>Risk Score</th>
+
+                        <th>Evidence</th>
+
+                        <th>Recommendation</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for finding in findings %}
+
+                    <tr>
+
+                        <!-- ID -->
+                        <td>
+                            <span class="id-text">
+                                #{{ finding[0] }}
+                            </span>
+                        </td>
+
+
+                        <!-- SOURCE -->
+                        <td>
+
+                            <span class="source-badge">
+                                • {{ finding[1] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- TARGET + IP ADDRESS -->
+                        <td>
+
+                            <span class="target-name">
+                                {{ finding[2] }}
+                            </span>
+
+                            <span class="target-ip">
+                                IP: {{ target_ips.get(finding[2]|string, "Not resolved") }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- FINDING -->
+                        <td>
+
+                            <span class="finding-name">
+                                {{ finding[3] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- SEVERITY -->
+                        <td>
+
+                            {% set severity = finding[7]|lower %}
+
+                            <span
+                                class="
+                                    severity-badge
+                                    {% if severity == 'critical' %}
+                                        severity-critical
+                                    {% elif severity == 'high' %}
+                                        severity-high
+                                    {% elif severity == 'medium' %}
+                                        severity-medium
+                                    {% else %}
+                                        severity-low
+                                    {% endif %}
+                                "
+                            >
+                                {{ finding[7] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- RISK SCORE -->
+                        <td>
+
+                            <div class="risk-score">
+                                {{ finding[8] }}/10
+                            </div>
+
+                            <div class="risk-track">
+
+                                <div
+                                    class="risk-fill risk-fill-score-{{ finding[8] or 0 }}"
+                                ></div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- EVIDENCE -->
+                        <td>
+
+                            <span class="evidence-text">
+                                {{ finding[9] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- RECOMMENDATION -->
+                        <td>
+
+                            <span class="recommendation-text">
+                                {{ finding[10] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- DATE -->
+                        <td>
+
+                            <span class="date-text">
+                                {{ finding[11] }}
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty-state">
+                No security findings are available yet.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

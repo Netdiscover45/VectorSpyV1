@@ -1,0 +1,1176 @@
+{% extends "base.html" %}
+
+{% block title %}
+VectorSpy | Dashboard
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.dashboard-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+
+/* =====================================================
+   TOPBAR
+===================================================== */
+
+.dashboard-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.dashboard-heading h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f1f9ff;
+}
+
+.dashboard-heading p {
+    margin-top: 6px;
+    color: #78909c;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   USER BOX
+===================================================== */
+
+.dashboard-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 155px;
+    padding: 9px 13px;
+    background: #0b1821;
+    border: 1px solid #183542;
+    border-radius: 9px;
+}
+
+.dashboard-avatar {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #00d9ff;
+    color: #041018;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dashboard-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-user-info strong {
+    color: #f1f9ff;
+    font-size: 13px;
+}
+
+.dashboard-user-info small {
+    color: #78909c;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.dashboard-arrow {
+    margin-left: auto;
+    color: #708894;
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.dashboard-stat-card {
+    min-width: 0;
+    background: #0b1821;
+    border: 1px solid #183542;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.dashboard-stat-icon {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: #102a36;
+    color: #00d9ff;
+    font-size: 18px;
+}
+
+.dashboard-stat-info {
+    min-width: 0;
+}
+
+.dashboard-stat-info span {
+    display: block;
+    color: #77909c;
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.dashboard-stat-info h3 {
+    color: #f2f9fd;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   MAIN DASHBOARD GRID
+===================================================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(0, 0.95fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.dashboard-panel {
+    min-width: 0;
+    background: #0b1821;
+    border: 1px solid #183542;
+    border-radius: 13px;
+    padding: 22px;
+    min-height: 300px;
+}
+
+.dashboard-panel-header {
+    margin-bottom: 25px;
+}
+
+.dashboard-panel-header h3 {
+    color: #f0f8fc;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.dashboard-panel-header p {
+    color: #708894;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+
+/* =====================================================
+   RISK DISTRIBUTION
+===================================================== */
+
+.risk-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.risk-item {
+    display: grid;
+    grid-template-columns:
+        65px
+        minmax(0, 1fr)
+        35px;
+    align-items: center;
+    gap: 12px;
+}
+
+.risk-label {
+    color: #d9eaf0;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.risk-bar {
+    width: 100%;
+    height: 7px;
+    background: #1b2d39;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.risk-fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+
+.risk-critical {
+    background: #ff4d5a;
+}
+
+.risk-high {
+    background: #ff7b1a;
+}
+
+.risk-medium {
+    background: #ffc400;
+}
+
+.risk-low {
+    background: #20c76a;
+}
+
+.risk-count {
+    color: #d9eaf0;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+}
+
+
+/* =====================================================
+   RECENT ASSESSMENTS
+===================================================== */
+
+.recent-list {
+    width: 100%;
+}
+
+.recent-row {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr)
+        110px
+        75px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #18303b;
+}
+
+.recent-row:last-child {
+    border-bottom: none;
+}
+
+.recent-target {
+    color: #e8f7ff;
+    font-size: 12px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recent-type {
+    color: #c4d6dd;
+    font-size: 11px;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.recent-status {
+    color: #39d98a;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.no-history {
+    color: #6d848f;
+    font-size: 12px;
+    padding: 30px 0;
+    text-align: center;
+}
+
+
+/* =====================================================
+   SECURITY MODULES
+===================================================== */
+
+.modules-section {
+    margin-bottom: 25px;
+}
+
+.modules-header {
+    margin-bottom: 15px;
+}
+
+.modules-header h3 {
+    color: #f0f8fc;
+    font-size: 17px;
+}
+
+.modules-header p {
+    color: #708894;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.module-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.module-card {
+    min-width: 0;
+    background: #0b1821;
+    border: 1px solid #183542;
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 175px;
+    transition: 0.2s;
+}
+
+.module-card:hover {
+    border-color: #24566a;
+    transform: translateY(-2px);
+}
+
+.module-icon {
+    font-size: 19px;
+    color: #00d9ff;
+    margin-bottom: 13px;
+}
+
+.module-card h3 {
+    color: #e8f7ff;
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.module-card p {
+    color: #78909c;
+    font-size: 11px;
+    line-height: 1.6;
+    min-height: 36px;
+    margin-bottom: 14px;
+}
+
+.module-status {
+    display: inline-block;
+    border: 1px solid #38505b;
+    color: #7e939c;
+    border-radius: 4px;
+    padding: 4px 7px;
+    font-size: 9px;
+}
+
+.active-module {
+    border-color: #16643f;
+    color: #35d58b;
+    background: #0b2419;
+}
+
+.v2-card {
+    opacity: 0.82;
+}
+
+
+/* =====================================================
+   NETWORK MODULE CLICK
+===================================================== */
+
+.network-module-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.network-module-link .module-card {
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.dashboard-footer {
+    color: #526a75;
+    font-size: 10px;
+    text-align: center;
+    padding: 5px 0 20px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1200px) {
+
+    .dashboard-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .module-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-panel {
+        min-height: auto;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .dashboard-topbar {
+        display: block;
+    }
+
+    .dashboard-user {
+        margin-top: 15px;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .module-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recent-row {
+        grid-template-columns:
+            minmax(0, 1fr)
+            90px;
+    }
+
+    .recent-status {
+        display: none;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-page">
+
+
+    <!-- ==================================================
+         TOPBAR
+    ================================================== -->
+
+    <header class="dashboard-topbar">
+
+        <div class="dashboard-heading">
+
+            <h2>
+                Security Dashboard
+            </h2>
+
+            <p>
+                Automated cybersecurity assessment overview
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-user">
+
+            <div class="dashboard-avatar">
+
+                {{ name[0]|upper }}
+
+            </div>
+
+
+            <div class="dashboard-user-info">
+
+                <strong>
+                    Welcome, {{ name }}
+                </strong>
+
+                <small>
+                    Student
+                </small>
+
+            </div>
+
+
+            <span class="dashboard-arrow">
+                ⌄
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================================================
+         STATISTICS
+    ================================================== -->
+
+    <section class="dashboard-stats">
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                ◉
+            </div>
+
+            <div class="dashboard-stat-info">
+
+                <span>
+                    Total Scans
+                </span>
+
+                <h3>
+                    {{ stats.total_scans }}
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                ◈
+            </div>
+
+            <div class="dashboard-stat-info">
+
+                <span>
+                    Open Ports
+                </span>
+
+                <h3>
+                    {{ stats.total_open_ports }}
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                !
+            </div>
+
+            <div class="dashboard-stat-info">
+
+                <span>
+                    Findings
+                </span>
+
+                <h3>
+                    {{ stats.total_findings }}
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                ◆
+            </div>
+
+            <div class="dashboard-stat-info">
+
+                <span>
+                    Risk Level
+                </span>
+
+                <h3>
+                    {{ stats.risk_level }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         RISK + RECENT ASSESSMENTS
+    ================================================== -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- RISK DISTRIBUTION -->
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <h3>
+                    Risk Distribution
+                </h3>
+
+                <p>
+                    Security findings by severity
+                </p>
+
+            </div>
+
+
+            <div class="risk-chart">
+
+
+                <div
+                    class="risk-item"
+                    data-count="{{ stats.risk_distribution.Critical }}"
+                >
+
+                    <span class="risk-label">
+                        Critical
+                    </span>
+
+                    <div class="risk-bar">
+
+                        <div
+                            class="risk-fill risk-critical"
+                            data-value="{{ stats.risk_distribution.Critical }}"
+                        ></div>
+
+                    </div>
+
+                    <b class="risk-count">
+                        {{ stats.risk_distribution.Critical }}
+                    </b>
+
+                </div>
+
+
+                <div
+                    class="risk-item"
+                    data-count="{{ stats.risk_distribution.High }}"
+                >
+
+                    <span class="risk-label">
+                        High
+                    </span>
+
+                    <div class="risk-bar">
+
+                        <div
+                            class="risk-fill risk-high"
+                            data-value="{{ stats.risk_distribution.High }}"
+                        ></div>
+
+                    </div>
+
+                    <b class="risk-count">
+                        {{ stats.risk_distribution.High }}
+                    </b>
+
+                </div>
+
+
+                <div
+                    class="risk-item"
+                    data-count="{{ stats.risk_distribution.Medium }}"
+                >
+
+                    <span class="risk-label">
+                        Medium
+                    </span>
+
+                    <div class="risk-bar">
+
+                        <div
+                            class="risk-fill risk-medium"
+                            data-value="{{ stats.risk_distribution.Medium }}"
+                        ></div>
+
+                    </div>
+
+                    <b class="risk-count">
+                        {{ stats.risk_distribution.Medium }}
+                    </b>
+
+                </div>
+
+
+                <div
+                    class="risk-item"
+                    data-count="{{ stats.risk_distribution.Low }}"
+                >
+
+                    <span class="risk-label">
+                        Low
+                    </span>
+
+                    <div class="risk-bar">
+
+                        <div
+                            class="risk-fill risk-low"
+                            data-value="{{ stats.risk_distribution.Low }}"
+                        ></div>
+
+                    </div>
+
+                    <b class="risk-count">
+                        {{ stats.risk_distribution.Low }}
+                    </b>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT ASSESSMENTS -->
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <h3>
+                    Recent Assessments
+                </h3>
+
+                <p>
+                    Latest security scans
+                </p>
+
+            </div>
+
+
+            <div class="recent-list">
+
+
+                {% if history %}
+
+                    {% for scan in history[:5] %}
+
+                        <div class="recent-row">
+
+                            <span class="recent-target">
+                                {{ scan[1] }}
+                            </span>
+
+                            <span class="recent-type">
+                                {{ scan[2] }}
+                            </span>
+
+                            <span class="recent-status">
+                                Completed
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <div class="no-history">
+                        No scans available.
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- ==================================================
+         SECURITY MODULES
+    ================================================== -->
+
+    <section class="modules-section">
+
+
+        <div class="modules-header">
+
+            <h3>
+                Security Assessment Modules
+            </h3>
+
+            <p>
+                Available and planned security assessment capabilities
+            </p>
+
+        </div>
+
+
+        <div class="module-grid">
+
+
+            <!-- ==================================================
+                 NETWORK SCAN
+            ================================================== -->
+
+            <a
+                href="/network-scan"
+                class="network-module-link"
+            >
+
+                <div class="module-card">
+
+                    <div class="module-icon">
+                        ◉
+                    </div>
+
+                    <h3>
+                        Network Scan
+                    </h3>
+
+                    <p>
+                        Nmap-based host, port and service discovery.
+                    </p>
+
+                    <span class="module-status active-module">
+                        V1 • Active
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- ==================================================
+                 WEB SECURITY
+            ================================================== -->
+
+            <a
+                href="/web-security"
+                class="network-module-link"
+            >
+
+                <div class="module-card">
+
+                    <div class="module-icon">
+                        ◈
+                    </div>
+
+                    <h3>
+                        Web Security
+                    </h3>
+
+                    <p>
+                        Basic web application security checks.
+                    </p>
+
+                    <span class="module-status active-module">
+                        V1 • Active
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- ==================================================
+                 TECHNOLOGY FINDER
+            ================================================== -->
+
+            <a
+                href="/technology-finder"
+                class="network-module-link"
+            >
+
+                <div class="module-card">
+
+                    <div class="module-icon">
+                        ◇
+                    </div>
+
+                    <h3>
+                        Technology Finder
+                    </h3>
+
+                    <p>
+                        Identify technologies and services used by targets.
+                    </p>
+
+                    <span class="module-status active-module">
+                        V1 • Active
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- ==================================================
+                 RISK ANALYSIS
+            ================================================== -->
+
+            <div class="module-card v2-card">
+
+                <div class="module-icon">
+                    ◆
+                </div>
+
+                <h3>
+                    Risk Analysis
+                </h3>
+
+                <p>
+                    Advanced analysis and classification of security findings.
+                </p>
+
+                <span class="module-status active-module">
+                    V1 • Active
+                </span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 OWASP ZAP
+            ================================================== -->
+
+            <div class="module-card v2-card">
+
+                <div class="module-icon">
+                    ◉
+                </div>
+
+                <h3>
+                    OWASP ZAP
+                </h3>
+
+                <p>
+                    Advanced web application security assessment.
+                </p>
+
+                <span class="module-status">
+                    V2 • Coming Soon
+                </span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 NIKTO
+            ================================================== -->
+
+            <div class="module-card v2-card">
+
+                <div class="module-icon">
+                    ◉
+                </div>
+
+                <h3>
+                    Nikto
+                </h3>
+
+                <p>
+                    Web server security assessment and checks.
+                </p>
+
+                <span class="module-status">
+                    V2 • Coming Soon
+                </span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 NUCLEI
+            ================================================== -->
+
+            <div class="module-card v2-card">
+
+                <div class="module-icon">
+                    ◉
+                </div>
+
+                <h3>
+                    Nuclei
+                </h3>
+
+                <p>
+                    Template-based vulnerability detection.
+                </p>
+
+                <span class="module-status">
+                    V2 • Coming Soon
+                </span>
+
+            </div>
+
+
+            <!-- ==================================================
+                 SYSTEM AUDITING
+            ================================================== -->
+
+            <div class="module-card v2-card">
+
+                <div class="module-icon">
+                    ◉
+                </div>
+
+                <h3>
+                    System Auditing
+                </h3>
+
+                <p>
+                    Linux and Windows security auditing modules.
+                </p>
+
+                <span class="module-status">
+                    V2 • Coming Soon
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         FOOTER
+    ================================================== -->
+
+    <footer class="dashboard-footer">
+
+        VectorSpy • Automated Cybersecurity Assessment Platform
+
+    </footer>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const riskItems =
+            document.querySelectorAll(".risk-item");
+
+
+        let maximum = 0;
+
+
+        riskItems.forEach(
+            function (item) {
+
+                const value =
+                    parseInt(
+                        item.getAttribute("data-count") || "0",
+                        10
+                    );
+
+
+                if (value > maximum) {
+
+                    maximum = value;
+
+                }
+
+            }
+        );
+
+
+        riskItems.forEach(
+            function (item) {
+
+                const fill =
+                    item.querySelector(".risk-fill");
+
+
+                const value =
+                    parseInt(
+                        fill.getAttribute("data-value") || "0",
+                        10
+                    );
+
+
+                let percentage = 0;
+
+
+                if (maximum > 0) {
+
+                    percentage =
+                        (value / maximum) * 100;
+
+                }
+
+
+                if (
+                    value > 0 &&
+                    percentage < 8
+                ) {
+
+                    percentage = 8;
+
+                }
+
+
+                fill.style.width =
+                    percentage + "%";
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}VectorSpy{% endblock %}
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #071018;
+            color: #e8f7ff;
+            min-height: 100vh;
+        }
+
+
+        /* ==================================================
+           SIDEBAR
+        ================================================== */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 238px;
+            height: 100vh;
+
+            background: #09141d;
+
+            border-right: 1px solid #17303e;
+
+            padding: 20px 12px;
+
+            overflow-y: auto;
+
+            z-index: 1000;
+        }
+
+
+        /* ==================================================
+           LOGO AREA
+        ================================================== */
+
+        .logo-area {
+
+            height: 145px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-bottom: 22px;
+
+            position: relative;
+        }
+
+
+        /* ROTATING RING */
+
+        .logo-ring {
+
+            position: absolute;
+
+            width: 112px;
+            height: 112px;
+
+            border-radius: 50%;
+
+            border: 2px solid transparent;
+
+            border-top-color: #00d9ff;
+            border-right-color: rgba(0, 217, 255, 0.55);
+
+            animation: logoRotate 3s linear infinite;
+
+            box-shadow:
+                0 0 8px rgba(0, 217, 255, 0.35),
+                0 0 20px rgba(0, 217, 255, 0.10);
+
+            pointer-events: none;
+        }
+
+
+        /* SECOND SUBTLE RING */
+
+        .logo-ring::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 7px;
+
+            border-radius: 50%;
+
+            border: 1px dashed rgba(0, 217, 255, 0.35);
+
+            animation: logoRotateReverse 5s linear infinite;
+        }
+
+
+        @keyframes logoRotate {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @keyframes logoRotateReverse {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+
+        }
+
+
+        /* LOGO IMAGE */
+
+        .logo-area img {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: 92px;
+
+            max-width: 100%;
+
+            height: auto;
+
+            object-fit: contain;
+
+            filter:
+                drop-shadow(0 0 8px rgba(0, 217, 255, 0.18));
+        }
+
+
+        /* ==================================================
+           NAVIGATION
+        ================================================== */
+
+        .nav-title {
+
+            color: #6e8795;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+            margin: 18px 12px 8px;
+        }
+
+
+        .nav-link {
+
+            display: block;
+
+            text-decoration: none;
+
+            color: #a8bdc8;
+
+            padding: 10px 13px;
+
+            margin: 3px 0;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+
+        .nav-link:hover {
+
+            background: #102530;
+
+            color: #00d9ff;
+        }
+
+
+        .nav-link.active {
+
+            background: #0e2b38;
+
+            color: #00d9ff;
+
+            border-left: 3px solid #00d9ff;
+
+            padding-left: 10px;
+
+            box-shadow:
+                inset 0 0 12px rgba(0, 217, 255, 0.04);
+        }
+
+
+        .nav-link.v2 {
+
+            color: #697d88;
+        }
+
+
+        .nav-link.v2:hover {
+
+            background: #102530;
+
+            color: #00d9ff;
+        }
+
+
+        .v2-badge {
+
+            float: right;
+
+            background: #1a2530;
+
+            color: #778996;
+
+            font-size: 9px;
+
+            padding: 3px 5px;
+
+            border-radius: 4px;
+
+            margin-top: 1px;
+        }
+
+
+        /* ==================================================
+           MAIN CONTENT
+        ================================================== */
+
+        .main {
+
+            margin-left: 238px;
+
+            padding: 28px;
+
+            min-height: 100vh;
+        }
+
+
+        /* ==================================================
+           TOPBAR
+        ================================================== */
+
+        .topbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .page-title {
+
+            font-size: 27px;
+
+            font-weight: 700;
+        }
+
+
+        .page-subtitle {
+
+            color: #78909c;
+
+            margin-top: 7px;
+
+            font-size: 13px;
+        }
+
+
+        .user-box {
+
+            color: #a9c0ca;
+
+            font-size: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .user-icon {
+
+            display: inline-flex;
+
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            background: #102a36;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #00d9ff;
+        }
+
+
+        /* ==================================================
+           MOBILE
+        ================================================== */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                border-right: none;
+
+                border-bottom: 1px solid #17303e;
+            }
+
+
+            .main {
+
+                margin-left: 0;
+
+                padding: 18px;
+            }
+
+
+            .topbar {
+
+                display: block;
+            }
+
+
+            .user-box {
+
+                margin-top: 15px;
+            }
+
+
+            .logo-area {
+
+                height: 120px;
+            }
+
+
+            .logo-ring {
+
+                width: 95px;
+                height: 95px;
+            }
+
+
+            .logo-area img {
+
+                width: 78px;
+            }
+
+        }
+
+    </style>
+
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     COMMON SIDEBAR
+====================================================== -->
+
+<aside class="sidebar">
+
+
+    <!-- ==================================================
+         LOGO
+    ================================================== -->
+
+    <div class="logo-area">
+
+        <!-- Rotating Ring -->
+
+        <div class="logo-ring"></div>
+
+
+        <!-- VectorSpy Logo -->
+
+        <img
+            src="{{ url_for('static', filename='images/VectorSpy-logo.png') }}"
+            alt="VectorSpy"
+        >
+
+    </div>
+
+
+
+    <!-- ==================================================
+         MAIN
+    ================================================== -->
+
+    <div class="nav-title">
+        Main
+    </div>
+
+
+    <a
+        href="/dashboard"
+        class="nav-link {% if request.path == '/dashboard' %}active{% endif %}"
+    >
+        ◈ Dashboard
+    </a>
+
+
+
+    <!-- ==================================================
+         SECURITY ASSESSMENT
+    ================================================== -->
+
+    <div class="nav-title">
+        Security Assessment
+    </div>
+
+
+    <!-- IMPORTANT:
+         Network Scan page is /network-scan
+         /scan is POST-only scanning endpoint
+    -->
+
+    <a
+        href="/network-scan"
+        class="nav-link {% if request.path == '/network-scan' %}active{% endif %}"
+    >
+        ◉ Network Scan
+    </a>
+
+
+    <a
+        href="/web-security"
+        class="nav-link {% if request.path == '/web-security' %}active{% endif %}"
+    >
+        ◈ Web Security
+    </a>
+
+
+    <a
+        href="/technology-finder"
+        class="nav-link {% if request.path == '/technology-finder' %}active{% endif %}"
+    >
+        ◇ Technology Finder
+    </a>
+    
+
+    <a
+        href="/findings"
+        class="nav-link {% if request.path == '/findings' %}active{% endif %}"
+    >
+        ◈ Findings
+    </a>
+
+
+
+    <!-- ==================================================
+         ANALYSIS
+    ================================================== -->
+
+    <div class="nav-title">
+        Analysis
+    </div>
+
+
+    <a
+        href="/risk-analysis"
+        class="nav-link {% if request.path == '/risk-analysis' %}active{% endif %}"
+    >
+        ◇ Risk Analysis
+    </a>
+
+
+
+    <!-- ==================================================
+         MANAGEMENT
+    ================================================== -->
+
+    <div class="nav-title">
+        Management
+    </div>
+
+
+    <a
+        href="/reports"
+        class="nav-link v2 {% if request.path == '/reports' %}active{%endif %}"
+    >
+        ▣ Reports
+
+       
+    </a>
+
+
+    <a
+        href="/scan-history"
+        class="nav-link {% if request.path == '/scan-history' %}active{% endif %}"
+    >
+        ◉ Scan History
+    </a>
+
+
+    <a
+        href="/profile"
+        class="nav-link {% if request.path == '/profile' %}active{% endif %}"
+    >
+        👤 Profile
+    </a>
+    <a
+    href="/settings"
+    class="nav-link {% if request.path == '/settings' %}active{% endif %}"
+>
+    ⚙ Settings
+</a>
+
+
+    <!-- ==================================================
+         V2 MODULES
+    ================================================== -->
+
+    <div class="nav-title">
+        V2 Modules
+    </div>
+
+
+    <a
+        href="#"
+        class="nav-link v2"
+    >
+        ◉ OWASP ZAP
+
+        <span class="v2-badge">
+            V2
+        </span>
+    </a>
+
+
+    <a
+        href="#"
+        class="nav-link v2"
+    >
+        ◉ Nikto
+
+        <span class="v2-badge">
+            V2
+        </span>
+    </a>
+
+
+    <a
+        href="#"
+        class="nav-link v2"
+    >
+        ◉ Nuclei
+
+        <span class="v2-badge">
+            V2
+        </span>
+    </a>
+
+
+    <a
+        href="#"
+        class="nav-link v2"
+    >
+        ◉ Linux Audit
+
+        <span class="v2-badge">
+            V2
+        </span>
+    </a>
+
+
+    <a
+        href="#"
+        class="nav-link v2"
+    >
+        ◉ Windows Audit
+
+        <span class="v2-badge">
+            V2
+        </span>
+    </a>
+
+
+
+    <!-- ==================================================
+         ACCOUNT
+    ================================================== -->
+
+    <div class="nav-title">
+        Account
+    </div>
+
+
+    <a
+        href="/logout"
+        class="nav-link"
+    >
+        ⇥ Logout
+    </a>
+
+
+</aside>
+
+
+
+<!-- ======================================================
+     MAIN
+====================================================== -->
+
+<main class="main">
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+
+{% block extra_js %}
+
+{% endblock %}
+
+
+</body>
+
+</html>

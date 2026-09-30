@@ -1,0 +1,794 @@
+{% extends "base.html" %}
+
+{% block title %}
+VectorSpy | Network Scan Results
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    .results-page {
+        width: 100%;
+        max-width: 1500px;
+        margin: 0 auto;
+    }
+
+    .results-summary {
+        margin-bottom: 20px;
+    }
+
+    .results-target {
+        color: #8fa5b8;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .results-target strong {
+        color: #00d9ff;
+    }
+
+    .scan-meta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+    }
+
+    .meta-box {
+        background: #0d1b27;
+        border: 1px solid #203548;
+        border-radius: 6px;
+        padding: 8px 12px;
+        color: #9fb2c3;
+        font-size: 12px;
+    }
+
+    .meta-box strong {
+        color: #dce8f0;
+    }
+
+    .host-panel {
+        margin-bottom: 20px;
+    }
+
+    .host-title {
+        color: #e2ebf2;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .host-subtitle {
+        color: #71879b;
+        font-size: 11px;
+        margin-top: 5px;
+    }
+
+    .results-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .results-table {
+        width: 100%;
+        min-width: 1200px;
+        border-collapse: collapse;
+    }
+
+    .results-table th {
+        text-align: left;
+        padding: 13px 12px;
+        font-size: 10px;
+        color: #7f94aa;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #24384d;
+        white-space: nowrap;
+    }
+
+    .results-table td {
+        padding: 14px 12px;
+        font-size: 12px;
+        color: #c8d4df;
+        border-bottom: 1px solid #1d2d3d;
+        vertical-align: top;
+    }
+
+    .results-table tr:hover {
+        background: rgba(0, 217, 255, 0.03);
+    }
+
+    .port-number {
+        color: #00d9ff;
+        font-weight: 700;
+    }
+
+    .state-open {
+        color: #6fe26f;
+        font-weight: 600;
+    }
+
+    .service-name {
+        color: #d8e5ef;
+        font-weight: 600;
+    }
+
+    .product-text {
+        color: #b7c7d4;
+    }
+
+    .version-text {
+        color: #8298ad;
+        max-width: 220px;
+        line-height: 1.5;
+    }
+
+    .evidence-text {
+        color: #91a6b9;
+        max-width: 260px;
+        line-height: 1.5;
+    }
+
+    .recommendation-text {
+        color: #91a6b9;
+        max-width: 320px;
+        line-height: 1.5;
+    }
+
+    .confidence {
+        color: #00d9ff;
+        font-weight: 700;
+    }
+
+    .risk-badge {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .critical-badge {
+        color: #ff5c5c;
+        background: rgba(255, 92, 92, 0.10);
+    }
+
+    .high-badge {
+        color: #ff7b7b;
+        background: rgba(255, 123, 123, 0.10);
+    }
+
+    .medium-badge {
+        color: #ffc857;
+        background: rgba(255, 200, 87, 0.10);
+    }
+
+    .low-badge {
+        color: #6fe26f;
+        background: rgba(111, 226, 111, 0.10);
+    }
+
+    .risk-score {
+        color: #d8e5ef;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .scan-error {
+        border: 1px solid rgba(255, 92, 92, 0.25);
+        background: rgba(255, 92, 92, 0.05);
+    }
+
+    .scan-error h3 {
+        color: #ff7777;
+        margin-bottom: 8px;
+    }
+
+    .scan-error p {
+        color: #d3bebe;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .no-results {
+        padding: 30px;
+        text-align: center;
+        border: 1px solid #203548;
+        background: #0c1924;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .no-results-title {
+        color: #ffc857;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .no-results-text {
+        color: #8298ad;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .no-ports {
+        padding: 25px 10px;
+        color: #7f94aa;
+        font-size: 13px;
+    }
+
+    .results-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+
+    .results-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .dashboard-action {
+        color: #00d9ff;
+        background: rgba(0, 217, 255, 0.08);
+        border: 1px solid rgba(0, 217, 255, 0.20);
+    }
+
+    .history-action {
+        color: #aebfd0;
+        background: #142331;
+        border: 1px solid #24384d;
+    }
+
+    .results-action:hover {
+        transform: translateY(-1px);
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="results-page">
+
+
+    <!-- =====================================================
+         TOPBAR
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <div>
+
+            <h1>
+                Network Scan Results
+            </h1>
+
+            <p class="page-subtitle">
+                Security assessment results
+            </p>
+
+        </div>
+
+
+        <div class="user-box">
+
+            <span class="user-icon">
+                {{ name[0]|upper }}
+            </span>
+
+            <span>
+                Welcome, {{ name }}
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         SUMMARY
+         ===================================================== -->
+
+    <section class="dashboard-panel results-summary">
+
+        <div class="dashboard-panel-header">
+
+            <div>
+
+                <h3>
+                    Security Scan Results
+                </h3>
+
+                <p class="results-target">
+
+                    Network assessment results for
+
+                    <strong>
+                        {% if target %}
+                            {{ target }}
+                        {% else %}
+                            Target not provided
+                        {% endif %}
+                    </strong>
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="scan-meta">
+
+            <div class="meta-box">
+
+                Scan ID:
+
+                <strong>
+                    {{ scan_id or "Not created" }}
+                </strong>
+
+            </div>
+
+
+            <div class="meta-box">
+
+                Module:
+
+                <strong>
+                    Nmap
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ERROR / EMPTY RESULT
+         ===================================================== -->
+
+    {% if not results %}
+
+        <section class="no-results">
+
+            <div class="no-results-title">
+
+                ⚠ No Nmap Results Returned
+
+            </div>
+
+            <div class="no-results-text">
+
+                The scan completed without returning a host result.
+
+                <br>
+
+                Check that the target is reachable and that Nmap is installed correctly.
+
+                <br>
+
+                Then run the scan again.
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         HOST RESULTS
+         ===================================================== -->
+
+    {% for host in results %}
+
+
+        {% if host.error %}
+
+            <section class="dashboard-panel host-panel scan-error">
+
+                <div class="dashboard-panel-header">
+
+                    <div>
+
+                        <h3>
+                            Scan Error
+                        </h3>
+
+                        <p>
+                            Nmap could not complete the requested assessment.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <p>
+                    {{ host.error }}
+                </p>
+
+            </section>
+
+
+        {% else %}
+
+
+            <section class="dashboard-panel host-panel">
+
+
+                <!-- HOST HEADER -->
+
+                <div class="dashboard-panel-header">
+
+                    <div>
+
+                        <h3 class="host-title">
+
+                            Host:
+
+                            {{ host.host }}
+
+                        </h3>
+
+
+                        <p class="host-subtitle">
+
+                            {% if host.hostname %}
+
+                                Hostname:
+                                {{ host.hostname }}
+
+                                •
+
+                            {% endif %}
+
+                            State:
+                            {{ host.state }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PORTS
+                     ================================================= -->
+
+                {% if host.ports %}
+
+
+                    <div class="results-table-wrapper">
+
+                        <table class="results-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Port
+                                    </th>
+
+                                    <th>
+                                        Protocol
+                                    </th>
+
+                                    <th>
+                                        State
+                                    </th>
+
+                                    <th>
+                                        Service
+                                    </th>
+
+                                    <th>
+                                        Product
+                                    </th>
+
+                                    <th>
+                                        Version
+                                    </th>
+
+                                    <th>
+                                        Confidence
+                                    </th>
+
+                                    <th>
+                                        Severity
+                                    </th>
+
+                                    <th>
+                                        Score
+                                    </th>
+
+                                    <th>
+                                        Evidence
+                                    </th>
+
+                                    <th>
+                                        Recommendation
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                {% for port in host.ports %}
+
+                                <tr>
+
+
+                                    <!-- PORT -->
+
+                                    <td>
+
+                                        <span class="port-number">
+
+                                            {{ port.port }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- PROTOCOL -->
+
+                                    <td>
+
+                                        {{ port.protocol or "tcp" }}
+
+                                    </td>
+
+
+                                    <!-- STATE -->
+
+                                    <td>
+
+                                        {% if port.state == "open" %}
+
+                                            <span class="state-open">
+
+                                                {{ port.state }}
+
+                                            </span>
+
+                                        {% else %}
+
+                                            {{ port.state }}
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- SERVICE -->
+
+                                    <td>
+
+                                        <span class="service-name">
+
+                                            {{ port.service or "Unknown" }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- PRODUCT -->
+
+                                    <td>
+
+                                        <span class="product-text">
+
+                                            {{ port.product or "Unknown" }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- VERSION -->
+
+                                    <td>
+
+                                        <div class="version-text">
+
+                                            {{ port.version or "Unknown" }}
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- CONFIDENCE -->
+
+                                    <td>
+
+                                        <span class="confidence">
+
+                                            {{ port.confidence or 0 }}%
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- SEVERITY -->
+
+                                    <td>
+
+                                        {% if port.severity == "Critical" %}
+
+                                            <span class="risk-badge critical-badge">
+                                                Critical
+                                            </span>
+
+                                        {% elif port.severity == "High" %}
+
+                                            <span class="risk-badge high-badge">
+                                                High
+                                            </span>
+
+                                        {% elif port.severity == "Medium" %}
+
+                                            <span class="risk-badge medium-badge">
+                                                Medium
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="risk-badge low-badge">
+                                                Low
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- SCORE -->
+
+                                    <td>
+
+                                        <span class="risk-score">
+
+                                            {{ port.risk_score or 0 }}/10
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- EVIDENCE -->
+
+                                    <td>
+
+                                        <div class="evidence-text">
+
+                                            {{ port.evidence or "No evidence available." }}
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- RECOMMENDATION -->
+
+                                    <td>
+
+                                        <div class="recommendation-text">
+
+                                            {{ port.recommendation or "Review this exposed service." }}
+
+                                        </div>
+
+                                    </td>
+
+
+                                </tr>
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <div class="no-ports">
+
+                        No open TCP ports detected on this host.
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </section>
+
+
+        {% endif %}
+
+
+    {% endfor %}
+
+
+    <!-- =====================================================
+         ACTIONS
+         ===================================================== -->
+
+    <div class="results-actions">
+
+        <a
+            href="/dashboard"
+            class="results-action dashboard-action"
+        >
+            ← Back to Dashboard
+        </a>
+
+
+        <a
+            href="/scan-history"
+            class="results-action history-action"
+        >
+            View Scan History →
+        </a>
+
+
+        <a
+            href="/findings"
+            class="results-action history-action"
+        >
+            View Findings →
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        VectorSpy © 2026
+
+        <span>
+            Automated Cybersecurity Assessment Platform
+        </span>
+
+    </footer>
+
+
+</div>
+
+{% endblock %}

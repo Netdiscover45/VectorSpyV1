@@ -1,0 +1,1230 @@
+{% extends "base.html" %}
+
+{% block title %}
+VectorSpy | Security Findings
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.findings-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* HERO */
+
+.findings-hero {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 105px;
+    padding: 22px 28px;
+    margin-bottom: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 217, 255, 0.07),
+            rgba(0, 217, 255, 0.015)
+        ),
+        #081923;
+
+    border: 1px solid #1b4052;
+    border-radius: 12px;
+}
+
+.findings-hero::after {
+    content: "";
+    position: absolute;
+    right: -70px;
+    top: -100px;
+
+    width: 300px;
+    height: 220px;
+
+    background: radial-gradient(
+        circle,
+        rgba(0, 217, 255, 0.09),
+        transparent 68%
+    );
+
+    pointer-events: none;
+}
+
+.findings-hero::before {
+    content: "";
+    position: absolute;
+    right: 20px;
+    top: 20px;
+
+    width: 180px;
+    height: 1px;
+
+    background: rgba(0, 217, 255, 0.35);
+
+    transform: rotate(-35deg);
+
+    box-shadow:
+        0 15px 0 rgba(0, 217, 255, 0.12),
+        0 30px 0 rgba(0, 217, 255, 0.08);
+
+    pointer-events: none;
+}
+
+.findings-hero-left {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.findings-icon {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: rgba(0, 217, 255, 0.07);
+    border: 1px solid rgba(0, 217, 255, 0.35);
+
+    color: #00d9ff;
+    font-size: 23px;
+
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.06);
+}
+
+.findings-hero h1 {
+    margin: 0;
+
+    font-size: 27px;
+    font-weight: 700;
+
+    color: #f4f8fb;
+}
+
+.findings-hero h1 span {
+    color: #00d9ff;
+}
+
+.findings-hero p {
+    margin: 5px 0 0;
+
+    color: #7fa4b8;
+    font-size: 12px;
+}
+
+/* STATUS */
+
+.findings-status {
+    position: relative;
+    z-index: 3;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 13px;
+
+    border-radius: 20px;
+
+    background: rgba(0, 217, 255, 0.05);
+    border: 1px solid rgba(0, 217, 255, 0.28);
+
+    color: #72dff5;
+
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.findings-status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #00d9ff;
+
+    box-shadow: 0 0 8px rgba(0, 217, 255, 0.8);
+}
+
+/* OVERVIEW */
+
+.findings-overview {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 13px;
+
+    margin-bottom: 18px;
+}
+
+.overview-card {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    padding: 15px 17px;
+
+    background: #091923;
+
+    border: 1px solid #183747;
+    border-radius: 10px;
+
+    transition: 0.2s ease;
+}
+
+.overview-card:hover {
+    border-color: #24566b;
+    transform: translateY(-1px);
+}
+
+.overview-icon {
+    width: 37px;
+    height: 37px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: rgba(0, 217, 255, 0.07);
+
+    color: #00d9ff;
+    font-size: 16px;
+}
+
+.overview-label {
+    color: #718e9e;
+
+    font-size: 10px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.overview-value {
+    margin-top: 3px;
+
+    color: #e9f4f8;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* PANEL */
+
+.findings-panel {
+    overflow: hidden;
+
+    margin-bottom: 20px;
+
+    background: #091923;
+
+    border: 1px solid #1a3949;
+    border-radius: 12px;
+}
+
+.findings-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid #173442;
+
+    background: linear-gradient(
+        90deg,
+        rgba(0, 217, 255, 0.035),
+        transparent
+    );
+}
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.panel-heading-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: rgba(0, 217, 255, 0.06);
+    border: 1px solid rgba(0, 217, 255, 0.20);
+
+    color: #00d9ff;
+    font-size: 14px;
+}
+
+.panel-heading h2 {
+    margin: 0;
+
+    color: #eaf5fa;
+
+    font-size: 15px;
+    font-weight: 650;
+}
+
+.panel-heading p {
+    margin: 3px 0 0;
+
+    color: #668392;
+    font-size: 11px;
+}
+
+.result-count {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 7px 11px;
+
+    border-radius: 6px;
+
+    background: #0d2633;
+
+    border: 1px solid #1b4658;
+
+    color: #80cddd;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+/* TABLE */
+
+.findings-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.findings-table {
+    width: 100%;
+    min-width: 1200px;
+
+    border-collapse: collapse;
+}
+
+.findings-table th {
+    text-align: left;
+
+    padding: 13px;
+
+    color: #688595;
+
+    font-size: 9px;
+    font-weight: 650;
+
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+
+    white-space: nowrap;
+
+    background: #07141c;
+
+    border-bottom: 1px solid #183746;
+}
+
+.findings-table td {
+    padding: 15px 13px;
+
+    color: #c2d1d9;
+
+    font-size: 11px;
+
+    vertical-align: top;
+
+    border-bottom: 1px solid #122b37;
+}
+
+.findings-table tbody tr {
+    transition: background 0.18s ease;
+}
+
+.findings-table tbody tr:hover {
+    background: rgba(0, 217, 255, 0.025);
+}
+
+.findings-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ID */
+
+.finding-id {
+    color: #5e8292;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+/* SOURCE */
+
+.source-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    font-size: 9px;
+    font-weight: 650;
+
+    white-space: nowrap;
+
+    background: #102531;
+
+    border: 1px solid #1c3d4c;
+}
+
+.source-badge::before {
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    margin-right: 6px;
+
+    background: currentColor;
+}
+
+.nmap-source {
+    color: #00d9ff;
+}
+
+.web-source {
+    color: #6eb8ff;
+}
+
+.technology-source {
+    color: #b58cff;
+}
+
+/* TARGET */
+
+.target-text {
+    display: block;
+
+    max-width: 175px;
+
+    color: #8eabb9;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* FINDING */
+
+.finding-name {
+    max-width: 220px;
+
+    color: #e1edf2;
+
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+/* PORT */
+
+.port-service {
+    color: #d5e4ea;
+
+    font-weight: 600;
+
+    line-height: 1.45;
+
+    white-space: nowrap;
+}
+
+.port-service small {
+    color: #718d9c;
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+/* SEVERITY */
+
+.severity-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.severity-badge::before {
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    margin-right: 6px;
+
+    background: currentColor;
+}
+
+.severity-badge.critical {
+    color: #ff6672;
+
+    background: rgba(255, 92, 92, 0.09);
+
+    border: 1px solid rgba(255, 92, 92, 0.18);
+}
+
+.severity-badge.high {
+    color: #ff9360;
+
+    background: rgba(255, 123, 76, 0.09);
+
+    border: 1px solid rgba(255, 123, 76, 0.18);
+}
+
+.severity-badge.medium {
+    color: #ffd05c;
+
+    background: rgba(255, 200, 87, 0.08);
+
+    border: 1px solid rgba(255, 200, 87, 0.17);
+}
+
+.severity-badge.low {
+    color: #65dc99;
+
+    background: rgba(111, 226, 111, 0.08);
+
+    border: 1px solid rgba(111, 226, 111, 0.16);
+}
+
+.severity-badge.unknown {
+    color: #899daa;
+
+    background: rgba(154, 170, 189, 0.07);
+
+    border: 1px solid rgba(154, 170, 189, 0.14);
+}
+
+/* RISK */
+
+.risk-score-wrapper {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    min-width: 70px;
+}
+
+.risk-score {
+    color: #dcebf1;
+
+    font-weight: 700;
+
+    font-size: 11px;
+}
+
+.risk-track {
+    width: 58px;
+
+    height: 3px;
+
+    overflow: hidden;
+
+    border-radius: 5px;
+
+    background: #162d38;
+}
+
+.risk-fill {
+    height: 100%;
+
+    border-radius: 5px;
+
+    background: #00d9ff;
+}
+
+/* EVIDENCE */
+
+.evidence-text {
+    max-width: 230px;
+
+    color: #7894a2;
+
+    line-height: 1.55;
+}
+
+/* RECOMMENDATION */
+
+.recommendation-text {
+    max-width: 270px;
+
+    color: #91aab6;
+
+    line-height: 1.55;
+}
+
+/* DATE */
+
+.date-text {
+    color: #708b99;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+/* EMPTY */
+
+.empty-findings {
+    min-height: 270px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 40px 20px;
+}
+
+.empty-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 14px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 217, 255, 0.05);
+
+    border: 1px solid rgba(0, 217, 255, 0.18);
+
+    color: #00d9ff;
+
+    font-size: 21px;
+}
+
+.empty-findings h3 {
+    margin: 0 0 7px;
+
+    color: #b9cbd4;
+
+    font-size: 15px;
+}
+
+.empty-findings p {
+    max-width: 450px;
+
+    margin: 0;
+
+    color: #637f8d;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+/* FOOTER */
+
+.findings-footer {
+    padding: 15px 0 5px;
+
+    text-align: center;
+
+    color: #526d7b;
+
+    font-size: 10px;
+}
+
+.findings-footer span {
+    color: #00a9c9;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+
+    .findings-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .findings-hero {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        padding: 20px;
+    }
+
+    .findings-status {
+        align-self: flex-start;
+    }
+
+    .findings-hero h1 {
+        font-size: 23px;
+    }
+
+    .findings-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .findings-panel-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="findings-page">
+
+    <!-- PAGE HERO -->
+
+    <section class="findings-hero">
+
+        <div class="findings-hero-left">
+
+            <div class="findings-icon">
+                ◈
+            </div>
+
+            <div>
+
+                <h1>
+                    Security <span>Findings</span>
+                </h1>
+
+                <p>
+                    Centralized security findings collected from VectorSpy assessments
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="findings-status">
+
+            <span class="findings-status-dot"></span>
+
+            Security Assessment Data
+
+        </div>
+
+    </section>
+
+
+    <!-- OVERVIEW -->
+
+    {% set total_findings = findings|length %}
+
+    {% set counts = namespace(
+        critical=0,
+        high=0,
+        medium=0,
+        low=0
+    ) %}
+
+    {% for item in findings %}
+
+        {% if item[7] == "Critical" %}
+            {% set counts.critical = counts.critical + 1 %}
+
+        {% elif item[7] == "High" %}
+            {% set counts.high = counts.high + 1 %}
+
+        {% elif item[7] == "Medium" %}
+            {% set counts.medium = counts.medium + 1 %}
+
+        {% elif item[7] == "Low" %}
+            {% set counts.low = counts.low + 1 %}
+
+        {% endif %}
+
+    {% endfor %}
+
+
+    <section class="findings-overview">
+
+        <div class="overview-card">
+
+            <div class="overview-icon">
+                ◈
+            </div>
+
+            <div>
+
+                <div class="overview-label">
+                    Total Findings
+                </div>
+
+                <div class="overview-value">
+                    {{ total_findings }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="overview-card">
+
+            <div class="overview-icon">
+                !
+            </div>
+
+            <div>
+
+                <div class="overview-label">
+                    Critical
+                </div>
+
+                <div class="overview-value">
+                    {{ counts.critical }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="overview-card">
+
+            <div class="overview-icon">
+                ▲
+            </div>
+
+            <div>
+
+                <div class="overview-label">
+                    High
+                </div>
+
+                <div class="overview-value">
+                    {{ counts.high }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="overview-card">
+
+            <div class="overview-icon">
+                ◌
+            </div>
+
+            <div>
+
+                <div class="overview-label">
+                    Other Findings
+                </div>
+
+                <div class="overview-value">
+                    {{ counts.medium + counts.low }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINDINGS PANEL -->
+
+    <section class="findings-panel">
+
+        <div class="findings-panel-header">
+
+            <div class="panel-heading">
+
+                <div class="panel-heading-icon">
+                    ▦
+                </div>
+
+                <div>
+
+                    <h2>
+                        All Security Findings
+                    </h2>
+
+                    <p>
+                        Results collected from Network, Web Security and Technology Finder scans
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="result-count">
+
+                {{ total_findings }}
+                Finding{% if total_findings != 1 %}s{% endif %}
+
+            </div>
+
+        </div>
+
+
+        {% if findings %}
+
+        <!-- FINDINGS TABLE -->
+
+        <div class="findings-table-wrapper">
+
+            <table class="findings-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Source</th>
+                        <th>Target</th>
+                        <th>Finding</th>
+                        <th>Port / Service</th>
+                        <th>Severity</th>
+                        <th>Risk Score</th>
+                        <th>Evidence</th>
+                        <th>Recommendation</th>
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for item in findings %}
+
+                    <tr>
+
+                        <!-- ID -->
+
+                        <td>
+
+                            <span class="finding-id">
+                                #{{ item[0] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- SOURCE -->
+
+                        <td>
+
+                            {% if item[1] == "Nmap" %}
+
+                                <span class="source-badge nmap-source">
+                                    Nmap
+                                </span>
+
+                            {% elif item[1] == "Web Security" %}
+
+                                <span class="source-badge web-source">
+                                    Web Security
+                                </span>
+
+                            {% elif item[1] == "Technology Finder" %}
+
+                                <span class="source-badge technology-source">
+                                    Technology Finder
+                                </span>
+
+                            {% else %}
+
+                                <span class="source-badge">
+                                    {{ item[1] }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- TARGET -->
+
+                        <td>
+
+                            <span
+                                class="target-text"
+                                title="{{ item[2] }}"
+                            >
+                                {{ item[2] }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- FINDING -->
+
+                        <td>
+
+                            <div class="finding-name">
+                                {{ item[3] }}
+                            </div>
+
+                        </td>
+
+
+                        <!-- PORT / SERVICE -->
+
+                        <td>
+
+                            {% if item[4] %}
+
+                                <div class="port-service">
+
+                                    Port {{ item[4] }}
+
+                                    {% if item[5] %}
+
+                                        <br>
+
+                                        <small>
+                                            {{ item[5] }}
+                                        </small>
+
+                                    {% endif %}
+
+                                    {% if item[6] %}
+
+                                        <br>
+
+                                        <small>
+                                            {{ item[6] }}
+                                        </small>
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- SEVERITY -->
+
+                        <td>
+
+                            {% if item[7] %}
+
+                                <span
+                                    class="severity-badge {{ item[7]|lower }}"
+                                >
+                                    {{ item[7] }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="severity-badge unknown">
+                                    N/A
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- RISK SCORE -->
+
+                        <!-- RISK SCORE -->
+{# filepath: c:\Users\digit\Downloads\VectorSpy_V1\templates\findings.html #}
+<td>
+    <div class="risk-score-wrapper">
+        {% set raw_risk = item[8]|default('', true) %}
+
+        {% if raw_risk != '' %}
+            {% set risk_score = raw_risk|int(0) %}
+
+            {% if risk_score < 0 %}
+                {% set risk_score = 0 %}
+            {% elif risk_score > 10 %}
+                {% set risk_score = 10 %}
+            {% endif %}
+
+            <span class="risk-score">{{ risk_score }}/10</span>
+
+            <div class="risk-track">
+                <div class="risk-fill"
+                     style="width: {{ risk_score * 10 }}%;">
+                </div>
+            </div>
+        {% else %}
+            <span class="risk-score">—</span>
+
+            <div class="risk-track">
+                <div class="risk-fill" style="width: 0%;"></div>
+            </div>
+        {% endif %}
+    </div>
+</td>
+
+
+                        <!-- EVIDENCE -->
+
+                        <td>
+
+                            <div class="evidence-text">
+
+                                {% if item[9] %}
+                                    {{ item[9] }}
+                                {% else %}
+                                    —
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- RECOMMENDATION -->
+
+                        <td>
+
+                            <div class="recommendation-text">
+
+                                {% if item[10] %}
+                                    {{ item[10] }}
+                                {% else %}
+                                    —
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            <span class="date-text">
+                                {{ item[11] }}
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- EMPTY STATE -->
+
+        <div class="empty-findings">
+
+            <div class="empty-icon">
+                ✓
+            </div>
+
+            <h3>
+                No Security Findings
+            </h3>
+
+            <p>
+                No findings have been recorded yet.
+                Run a Network Scan, Web Security Scan,
+                or Technology Finder assessment to generate security findings.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="findings-footer">
+
+        VectorSpy © 2026
+
+        <span>
+            Automated Cybersecurity Assessment Platform
+        </span>
+
+    </footer>
+
+</div>
+
+{% endblock %}

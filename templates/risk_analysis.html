@@ -1,0 +1,1554 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   VECTORSPY - RISK ANALYSIS
+   Professional Cybersecurity Dashboard UI
+   ========================================================= */
+
+.risk-page {
+    padding: 10px 0 45px;
+    color: #dce8f2;
+}
+
+/* =========================
+   SCOPE SELECTOR
+========================= */
+
+.scope-panel {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 22px;
+    padding: 22px;
+    border: 1px solid rgba(0, 217, 255, 0.14);
+    border-radius: 14px;
+    background:
+        linear-gradient(135deg, rgba(0,217,255,0.045), rgba(9,20,31,0.95)),
+        #0b151f;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.16);
+}
+
+.scope-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #00d9ff;
+}
+
+.scope-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 18px;
+}
+
+.scope-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.scope-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(0,217,255,0.08);
+    border: 1px solid rgba(0,217,255,0.18);
+    color: #00d9ff;
+    font-size: 18px;
+}
+
+.scope-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 650;
+}
+
+.scope-subtitle {
+    margin: 4px 0 0;
+    color: #718898;
+    font-size: 12px;
+}
+
+.scope-status {
+    padding: 6px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(0,217,255,0.18);
+    background: rgba(0,217,255,0.06);
+    color: #00d9ff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.scope-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.scope-select {
+    min-width: 350px;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid #243b4d;
+    background: #07111a;
+    color: #dce8f2;
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.scope-select:hover,
+.scope-select:focus {
+    border-color: rgba(0,217,255,0.45);
+    box-shadow: 0 0 0 3px rgba(0,217,255,0.05);
+}
+
+.view-all-btn {
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #00d9ff;
+    background: rgba(0,217,255,0.06);
+    border: 1px solid rgba(0,217,255,0.18);
+    font-size: 12px;
+    font-weight: 650;
+    transition: 0.2s ease;
+}
+
+.view-all-btn:hover {
+    background: rgba(0,217,255,0.12);
+    border-color: rgba(0,217,255,0.35);
+}
+
+.scope-description {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.018);
+    border: 1px solid #172b39;
+    color: #718898;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.scope-description strong {
+    color: #dce8f2;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.risk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.risk-title h1 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.risk-title p {
+    margin: 7px 0 0;
+    color: #718898;
+    font-size: 13px;
+}
+
+.analysis-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(0,217,255,0.08);
+    border: 1px solid rgba(0,217,255,0.18);
+    color: #00d9ff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
+
+.risk-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.risk-stat-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 125px;
+    padding: 19px;
+    border: 1px solid #1b3141;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #101d28, #0c1821);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.risk-stat-card:hover {
+    transform: translateY(-2px);
+    border-color: #294456;
+}
+
+.risk-stat-card::after {
+    content: "";
+    position: absolute;
+    right: -25px;
+    bottom: -30px;
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.015);
+}
+
+.stat-label {
+    color: #8096a6;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 650;
+}
+
+.stat-value {
+    margin-top: 10px;
+    color: #ffffff;
+    font-size: 29px;
+    font-weight: 750;
+}
+
+.stat-small {
+    margin-top: 4px;
+    color: #5f7584;
+    font-size: 11px;
+}
+
+.stat-critical {
+    border-top: 2px solid #ef4444;
+}
+
+.stat-high {
+    border-top: 2px solid #f97316;
+}
+
+.stat-medium {
+    border-top: 2px solid #eab308;
+}
+
+.stat-low {
+    border-top: 2px solid #22c55e;
+}
+
+/* =========================
+   SCORE + DISTRIBUTION
+========================= */
+
+.score-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.score-card,
+.distribution-card {
+    border: 1px solid #1b3141;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #101d28, #0c1821);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+
+.score-card {
+    padding: 25px;
+    text-align: center;
+}
+
+.distribution-card {
+    padding: 23px;
+}
+
+.section-title {
+    margin: 0 0 19px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 650;
+}
+
+.section-title::before {
+    content: "";
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    margin-right: 9px;
+    vertical-align: -2px;
+    border-radius: 4px;
+    background: #00d9ff;
+}
+
+/* =========================
+   SCORE RING
+========================= */
+
+.score-circle {
+    width: 164px;
+    height: 164px;
+    margin: 10px auto 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #1b3040;
+    box-shadow: 0 0 30px rgba(0,217,255,0.06);
+}
+
+.score-inner {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    background: #08131c;
+    border: 1px solid #1b303d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.score-number {
+    color: #ffffff;
+    font-size: 35px;
+    line-height: 1;
+    font-weight: 750;
+}
+
+.score-label {
+    margin-top: 6px;
+    color: #637b8a;
+    font-size: 9px;
+    letter-spacing: 0.7px;
+}
+
+.risk-level {
+    color: #00d9ff;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.risk-description {
+    margin-top: 6px;
+    color: #718898;
+    font-size: 11px;
+}
+
+/* =========================
+   DISTRIBUTION
+========================= */
+
+.distribution-item {
+    margin-bottom: 18px;
+}
+
+.distribution-item:last-child {
+    margin-bottom: 0;
+}
+
+.distribution-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 7px;
+}
+
+.distribution-name {
+    color: #cbd9e0;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.distribution-count {
+    color: #718898;
+    font-size: 11px;
+}
+
+.distribution-track {
+    height: 7px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #182c39;
+}
+
+.distribution-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.8s ease;
+}
+
+.critical-fill {
+    background: #ef4444;
+}
+
+.high-fill {
+    background: #f97316;
+}
+
+.medium-fill {
+    background: #eab308;
+}
+
+.low-fill {
+    background: #22c55e;
+}
+
+/* =========================
+   MODULE RISK
+========================= */
+
+.module-section {
+    margin-bottom: 22px;
+}
+
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.module-card {
+    padding: 19px;
+    border: 1px solid #1b3141;
+    border-radius: 11px;
+    background: linear-gradient(145deg, #101d28, #0c1821);
+    transition: 0.2s ease;
+}
+
+.module-card:hover {
+    transform: translateY(-2px);
+    border-color: #294456;
+}
+
+.module-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.module-name {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.module-icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    color: #00d9ff;
+    background: rgba(0,217,255,0.07);
+    border: 1px solid rgba(0,217,255,0.12);
+    font-size: 12px;
+}
+
+.module-count {
+    margin-top: 6px;
+    color: #667e8d;
+    font-size: 11px;
+}
+
+.module-risk {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.module-average {
+    color: #00d9ff;
+    font-size: 24px;
+    font-weight: 750;
+}
+
+.module-level {
+    padding: 5px 9px;
+    border-radius: 5px;
+    background: #172a36;
+    color: #b8cbd4;
+    font-size: 10px;
+    font-weight: 650;
+}
+
+/* =========================
+   TOP RISKS
+========================= */
+
+.top-risk-card,
+.recommendation-card {
+    margin-bottom: 18px;
+    padding: 21px;
+    overflow: hidden;
+    border: 1px solid #1b3141;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #101d28, #0c1821);
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.risk-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+}
+
+.risk-table th {
+    padding: 11px 10px;
+    border-bottom: 1px solid #1c3443;
+    color: #607987;
+    text-align: left;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    font-weight: 700;
+}
+
+.risk-table td {
+    padding: 13px 10px;
+    border-bottom: 1px solid #152934;
+    color: #bdccd4;
+    font-size: 11px;
+    vertical-align: middle;
+}
+
+.risk-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.risk-table tbody tr:hover {
+    background: rgba(0,217,255,0.025);
+}
+
+.risk-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.finding-name {
+    max-width: 250px;
+    color: #dce8f2;
+    font-weight: 600;
+}
+
+.source-label {
+    color: #718898;
+}
+
+.target-label {
+    color: #a9bdc8;
+    font-family: monospace;
+    font-size: 10px;
+}
+
+.risk-score {
+    color: #ffffff;
+    font-weight: 750;
+}
+
+.severity-badge,
+.priority-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.severity-critical,
+.priority-immediate {
+    background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(239,68,68,0.18);
+    color: #ff6b6b;
+}
+
+.severity-high,
+.priority-high {
+    background: rgba(249,115,22,0.12);
+    border: 1px solid rgba(249,115,22,0.18);
+    color: #ff9a5c;
+}
+
+.severity-medium,
+.priority-medium {
+    background: rgba(234,179,8,0.12);
+    border: 1px solid rgba(234,179,8,0.18);
+    color: #f3c84b;
+}
+
+.severity-low,
+.priority-low {
+    background: rgba(34,197,94,0.12);
+    border: 1px solid rgba(34,197,94,0.18);
+    color: #4ade80;
+}
+
+/* =========================
+   RECOMMENDATIONS
+========================= */
+
+.recommendation-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.recommendation-item {
+    display: flex;
+    gap: 11px;
+    padding: 13px;
+    border: 1px solid #182e3c;
+    border-radius: 8px;
+    background: #0b1720;
+    transition: 0.18s ease;
+}
+
+.recommendation-item:hover {
+    border-color: #274252;
+    transform: translateY(-1px);
+}
+
+.recommendation-number {
+    flex: 0 0 27px;
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    background: rgba(0,217,255,0.08);
+    border: 1px solid rgba(0,217,255,0.13);
+    color: #00d9ff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.recommendation-text {
+    color: #aebfc8;
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-state {
+    padding: 38px 20px;
+    text-align: center;
+    color: #637b8a;
+}
+
+.empty-state-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(0,217,255,0.05);
+    color: #00d9ff;
+}
+
+.empty-state h3 {
+    margin: 0 0 6px;
+    color: #c8d6dd;
+    font-size: 14px;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 11px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.dashboard-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    padding-top: 17px;
+    border-top: 1px solid #172c39;
+    color: #526b7a;
+    font-size: 10px;
+}
+
+.dashboard-footer span {
+    color: #455c69;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1050px) {
+
+    .risk-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .score-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .module-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recommendation-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .risk-page {
+        padding-top: 5px;
+    }
+
+    .scope-header {
+        flex-direction: column;
+    }
+
+    .scope-select {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    .scope-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .view-all-btn {
+        justify-content: center;
+    }
+
+    .risk-header {
+        align-items: flex-start;
+    }
+
+    .risk-title h1 {
+        font-size: 23px;
+    }
+
+    .risk-title p {
+        font-size: 11px;
+    }
+
+    .risk-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+    }
+
+    .risk-stat-card {
+        min-height: 110px;
+        padding: 14px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .dashboard-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+    }
+}
+
+@media (max-width: 460px) {
+
+    .risk-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .score-card,
+    .distribution-card,
+    .top-risk-card,
+    .recommendation-card {
+        padding: 16px;
+    }
+}
+</style>
+
+
+<div class="risk-page">
+
+    <!-- =====================================================
+         RISK ANALYSIS SCOPE
+         ===================================================== -->
+
+    <section class="scope-panel">
+
+        <div class="scope-header">
+
+            <div class="scope-title-wrap">
+
+                <div class="scope-icon">
+                    ◈
+                </div>
+
+                <div>
+                    <h3 class="scope-title">
+                        Risk Analysis Scope
+                    </h3>
+
+                    <p class="scope-subtitle">
+                        Select the assessment scope you want to analyze.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="scope-status">
+                {% if is_scan_specific %}
+                    Scan Specific
+                {% else %}
+                    All Scans
+                {% endif %}
+            </div>
+
+        </div>
+
+
+        <form
+            method="GET"
+            action="/risk-analysis"
+            class="scope-form"
+        >
+
+            <select
+                name="scan_id"
+                class="scope-select"
+                onchange="this.form.submit()"
+            >
+
+                <option value="">
+                    All Scans — Combined Analysis
+                </option>
+
+                {% for scan in scan_history %}
+
+                    <option
+                        value="{{ scan[0] }}"
+                        {% if selected_scan_id|string == scan[0]|string %}
+                            selected
+                        {% endif %}
+                    >
+                        #{{ scan[0] }} —
+                        {{ scan[1] }} —
+                        {{ scan[2] }} —
+                        {{ scan[3] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            {% if is_scan_specific %}
+
+                <a
+                    href="/risk-analysis"
+                    class="view-all-btn"
+                >
+                    ← View All Scans
+                </a>
+
+            {% endif %}
+
+        </form>
+
+
+        <div class="scope-description">
+
+            <strong>{{ analysis_title }}</strong>
+
+            <br>
+
+            {{ analysis_scope }}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="risk-header">
+
+        <div class="risk-title">
+
+            <h1>
+                Risk Analysis
+
+                <span class="analysis-badge">
+                    Security Intelligence
+                </span>
+            </h1>
+
+            <p>
+                Centralized security risk assessment based on collected findings.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STAT CARDS
+         ===================================================== -->
+
+    <div class="risk-stats">
+
+        <div class="risk-stat-card stat-critical">
+
+            <div class="stat-label">
+                Critical Findings
+            </div>
+
+            <div class="stat-value">
+                {{ critical_count }}
+            </div>
+
+            <div class="stat-small">
+                Immediate attention required
+            </div>
+
+        </div>
+
+
+        <div class="risk-stat-card stat-high">
+
+            <div class="stat-label">
+                High Findings
+            </div>
+
+            <div class="stat-value">
+                {{ high_count }}
+            </div>
+
+            <div class="stat-small">
+                High-priority security issues
+            </div>
+
+        </div>
+
+
+        <div class="risk-stat-card stat-medium">
+
+            <div class="stat-label">
+                Medium Findings
+            </div>
+
+            <div class="stat-value">
+                {{ medium_count }}
+            </div>
+
+            <div class="stat-small">
+                Should be reviewed
+            </div>
+
+        </div>
+
+
+        <div class="risk-stat-card stat-low">
+
+            <div class="stat-label">
+                Low Findings
+            </div>
+
+            <div class="stat-value">
+                {{ low_count }}
+            </div>
+
+            <div class="stat-small">
+                Low-priority observations
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCORE + DISTRIBUTION
+         ===================================================== -->
+
+    <div class="score-layout">
+
+
+        <!-- SCORE -->
+
+        <div class="score-card">
+
+            <div class="section-title">
+                Overall Security Score
+            </div>
+
+            <div
+                class="score-circle"
+                data-score="{{ overall_score }}"
+            >
+
+                <div class="score-inner">
+
+                    <div class="score-number">
+                        {{ overall_score }}
+                    </div>
+
+                    <div class="score-label">
+                        OUT OF 100
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="risk-level">
+                {{ risk_level }}
+            </div>
+
+            <div class="risk-description">
+                Based on {{ total_findings }} security finding(s)
+            </div>
+
+        </div>
+
+
+        <!-- DISTRIBUTION -->
+
+        <div class="distribution-card">
+
+            <div class="section-title">
+                Risk Distribution
+            </div>
+
+
+            <div class="distribution-item">
+
+                <div class="distribution-top">
+
+                    <span class="distribution-name">
+                        Critical
+                    </span>
+
+                    <span class="distribution-count">
+                        {{ critical_count }}
+                    </span>
+
+                </div>
+
+                <div class="distribution-track">
+
+                    <div
+                        class="distribution-fill critical-fill"
+                        data-risk-percent="{{ critical_percent }}"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="distribution-item">
+
+                <div class="distribution-top">
+
+                    <span class="distribution-name">
+                        High
+                    </span>
+
+                    <span class="distribution-count">
+                        {{ high_count }}
+                    </span>
+
+                </div>
+
+                <div class="distribution-track">
+
+                    <div
+                        class="distribution-fill high-fill"
+                        data-risk-percent="{{ high_percent }}"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="distribution-item">
+
+                <div class="distribution-top">
+
+                    <span class="distribution-name">
+                        Medium
+                    </span>
+
+                    <span class="distribution-count">
+                        {{ medium_count }}
+                    </span>
+
+                </div>
+
+                <div class="distribution-track">
+
+                    <div
+                        class="distribution-fill medium-fill"
+                        data-risk-percent="{{ medium_percent }}"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="distribution-item">
+
+                <div class="distribution-top">
+
+                    <span class="distribution-name">
+                        Low
+                    </span>
+
+                    <span class="distribution-count">
+                        {{ low_count }}
+                    </span>
+
+                </div>
+
+                <div class="distribution-track">
+
+                    <div
+                        class="distribution-fill low-fill"
+                        data-risk-percent="{{ low_percent }}"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODULE RISK
+         ===================================================== -->
+
+    <section class="module-section">
+
+        <div class="section-title">
+            Risk by Module
+        </div>
+
+        <div class="module-grid">
+
+            {% for module_name, module in module_data.items() %}
+
+            <div class="module-card">
+
+                <div class="module-top">
+
+                    <div>
+
+                        <div class="module-name">
+                            {{ module_name }}
+                        </div>
+
+                        <div class="module-count">
+                            {{ module.total }} finding(s)
+                        </div>
+
+                    </div>
+
+                    <div class="module-icon">
+                        ◉
+                    </div>
+
+                </div>
+
+
+                <div class="module-risk">
+
+                    <div class="module-average">
+                        {{ module.average }}/10
+                    </div>
+
+                    <div class="module-level">
+                        {{ module.level }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TOP 5 RISKS
+         ===================================================== -->
+
+    <section class="top-risk-card">
+
+        <div class="section-title">
+            Top 5 Highest-Risk Findings
+        </div>
+
+
+        {% if top_findings %}
+
+        <div class="table-wrapper">
+
+            <table class="risk-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Finding
+                        </th>
+
+                        <th>
+                            Source
+                        </th>
+
+                        <th>
+                            Target
+                        </th>
+
+                        <th>
+                            Severity
+                        </th>
+
+                        <th>
+                            Risk Score
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for finding in top_findings %}
+
+                    {% set severity = finding[7]|lower %}
+                    {% set score = finding[8]|int %}
+
+                    <tr>
+
+                        <td>
+
+                            <div class="finding-name">
+                                {{ finding[3] }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="source-label">
+                                {{ finding[1] }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="target-label">
+                                {{ finding[2] }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="severity-badge severity-{{ severity }}">
+                                {{ finding[7] }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="risk-score">
+                                {{ score }}/10
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if score >= 9 %}
+
+                                <span class="priority-badge priority-immediate">
+                                    Immediate
+                                </span>
+
+                            {% elif score >= 7 %}
+
+                                <span class="priority-badge priority-high">
+                                    High
+                                </span>
+
+                            {% elif score >= 4 %}
+
+                                <span class="priority-badge priority-medium">
+                                    Medium
+                                </span>
+
+                            {% else %}
+
+                                <span class="priority-badge priority-low">
+                                    Low
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                ◈
+            </div>
+
+            <h3>
+                No Security Findings
+            </h3>
+
+            <p>
+                Run a Network Scan or Web Security Scan to generate risk findings.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         RECOMMENDATIONS
+         ===================================================== -->
+
+    <section class="recommendation-card">
+
+        <div class="section-title">
+            Recommended Actions
+        </div>
+
+
+        {% if recommendations %}
+
+        <div class="recommendation-list">
+
+            {% for recommendation in recommendations %}
+
+            <div class="recommendation-item">
+
+                <div class="recommendation-number">
+                    {{ loop.index }}
+                </div>
+
+                <div class="recommendation-text">
+                    {{ recommendation }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                ✓
+            </div>
+
+            <h3>
+                No Recommendations Available
+            </h3>
+
+            <p>
+                Recommendations will appear after security findings are generated.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <div>
+            VectorSpy © 2026
+        </div>
+
+        <span>
+            Automated Cybersecurity Assessment Platform
+        </span>
+
+    </footer>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* =========================
+       SCORE RING
+    ========================= */
+
+    const scoreCircle =
+        document.querySelector(".score-circle");
+
+    if (scoreCircle) {
+
+        let score =
+            Number(scoreCircle.dataset.score) || 0;
+
+        score =
+            Math.min(Math.max(score, 0), 100);
+
+        scoreCircle.style.background =
+            `conic-gradient(
+                #00d9ff ${score}%,
+                #1b3040 ${score}%
+            )`;
+    }
+
+
+    /* =========================
+       RISK DISTRIBUTION BARS
+    ========================= */
+
+    document
+        .querySelectorAll("[data-risk-percent]")
+        .forEach(function (fill) {
+
+            let percent =
+                Number(fill.dataset.riskPercent) || 0;
+
+            percent =
+                Math.min(Math.max(percent, 0), 100);
+
+            requestAnimationFrame(function () {
+
+                fill.style.width =
+                    percent + "%";
+
+            });
+
+        });
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,506 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - VectorSpy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .settings-page {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .settings-header {
+        margin-bottom: 28px;
+    }
+
+    .settings-header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    .settings-header p {
+        margin: 8px 0 0;
+        color: #8193a6;
+        font-size: 14px;
+    }
+
+    .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .settings-card {
+        background: linear-gradient(
+            145deg,
+            rgba(16, 31, 43, 0.98),
+            rgba(10, 22, 32, 0.98)
+        );
+        border: 1px solid rgba(0, 217, 255, 0.10);
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .settings-card.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .settings-card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .settings-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 217, 255, 0.08);
+        border: 1px solid rgba(0, 217, 255, 0.15);
+        color: #00d9ff;
+        font-size: 19px;
+    }
+
+    .settings-card-header h3 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 16px;
+    }
+
+    .settings-card-header p {
+        margin: 4px 0 0;
+        color: #718397;
+        font-size: 12px;
+    }
+
+    .setting-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .setting-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .setting-info h4 {
+        margin: 0 0 5px;
+        color: #dce7f0;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .setting-info p {
+        margin: 0;
+        color: #718397;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .setting-value {
+        color: #00d9ff;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        background: rgba(0, 217, 255, 0.08);
+        border: 1px solid rgba(0, 217, 255, 0.14);
+        color: #00d9ff;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #00d9ff;
+        box-shadow: 0 0 8px rgba(0, 217, 255, 0.7);
+    }
+
+    .v2-badge {
+        padding: 5px 9px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #8798aa;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+    }
+
+    .settings-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    .settings-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 17px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .dashboard-btn {
+        color: #00d9ff;
+        background: rgba(0, 217, 255, 0.08);
+        border: 1px solid rgba(0, 217, 255, 0.18);
+    }
+
+    .dashboard-btn:hover {
+        background: rgba(0, 217, 255, 0.14);
+    }
+
+    .logout-btn {
+        color: #ff7b7b;
+        background: rgba(255, 80, 80, 0.07);
+        border: 1px solid rgba(255, 80, 80, 0.15);
+    }
+
+    .logout-btn:hover {
+        background: rgba(255, 80, 80, 0.12);
+    }
+
+    .settings-footer {
+        margin-top: 30px;
+        padding: 18px 4px;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #647789;
+        font-size: 11px;
+    }
+
+    .settings-footer span {
+        color: #4f6477;
+    }
+
+    @media (max-width: 850px) {
+        .settings-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .settings-card.full-width {
+            grid-column: auto;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .setting-row {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .settings-actions {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .settings-footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 7px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="settings-page">
+
+    <div class="settings-header">
+        <h1>Settings</h1>
+        <p>Manage your VectorSpy platform configuration and security preferences.</p>
+    </div>
+
+    <div class="settings-grid">
+
+        <!-- Account -->
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+                <div class="settings-icon">◉</div>
+                <div>
+                    <h3>Account</h3>
+                    <p>Your current VectorSpy account information</p>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Username</h4>
+                    <p>Currently logged-in user</p>
+                </div>
+
+                <div class="setting-value">
+                    {{ name }}
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Account Type</h4>
+                    <p>Access level for this platform</p>
+                </div>
+
+                <div class="setting-value">
+                    Standard
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Authentication</h4>
+                    <p>Current session authentication status</p>
+                </div>
+
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    Active
+                </span>
+            </div>
+
+        </section>
+
+
+        <!-- Appearance -->
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+                <div class="settings-icon">◈</div>
+                <div>
+                    <h3>Appearance</h3>
+                    <p>VectorSpy interface preferences</p>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Theme</h4>
+                    <p>Current application interface theme</p>
+                </div>
+
+                <div class="setting-value">
+                    Dark Cyber
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Interface</h4>
+                    <p>Professional cybersecurity dashboard layout</p>
+                </div>
+
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    Enabled
+                </span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Customization</h4>
+                    <p>Additional interface customization</p>
+                </div>
+
+                <span class="v2-badge">V2</span>
+            </div>
+
+        </section>
+
+
+        <!-- Security -->
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+                <div class="settings-icon">⌁</div>
+                <div>
+                    <h3>Security</h3>
+                    <p>Assessment and session security</p>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Assessment Mode</h4>
+                    <p>Authorized security assessment workflow</p>
+                </div>
+
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    Enabled
+                </span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Session</h4>
+                    <p>Current user session status</p>
+                </div>
+
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    Active
+                </span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Advanced Security Controls</h4>
+                    <p>Additional authentication and security controls</p>
+                </div>
+
+                <span class="v2-badge">V2</span>
+            </div>
+
+        </section>
+
+
+        <!-- Application -->
+        <section class="settings-card">
+
+            <div class="settings-card-header">
+                <div class="settings-icon">▣</div>
+                <div>
+                    <h3>Application</h3>
+                    <p>Current VectorSpy platform configuration</p>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Platform</h4>
+                    <p>Cybersecurity assessment platform</p>
+                </div>
+
+                <div class="setting-value">
+                    VectorSpy
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Version</h4>
+                    <p>Current development version</p>
+                </div>
+
+                <div class="setting-value">
+                    V1
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Database</h4>
+                    <p>Local application data storage</p>
+                </div>
+
+                <div class="setting-value">
+                    SQLite
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Advanced -->
+        <section class="settings-card full-width">
+
+            <div class="settings-card-header">
+                <div class="settings-icon">⚡</div>
+                <div>
+                    <h3>Advanced Modules</h3>
+                    <p>Future VectorSpy security capabilities</p>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>OWASP ZAP Integration</h4>
+                    <p>Advanced web application security assessment</p>
+                </div>
+
+                <span class="v2-badge">V2</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Nikto & Nuclei</h4>
+                    <p>Extended web vulnerability assessment capabilities</p>
+                </div>
+
+                <span class="v2-badge">V2</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Linux & Windows Security Audit</h4>
+                    <p>Operating-system security auditing modules</p>
+                </div>
+
+                <span class="v2-badge">V2</span>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>Advanced Reporting</h4>
+                    <p>Extended reporting and security analysis features</p>
+                </div>
+
+                <span class="v2-badge">V2</span>
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <div class="settings-actions">
+        <a href="/dashboard" class="settings-btn dashboard-btn">
+            ← Dashboard
+        </a>
+
+        <a href="/logout" class="settings-btn logout-btn">
+            ⇥ Logout
+        </a>
+    </div>
+
+
+    <footer class="settings-footer">
+        <span>VectorSpy © 2026</span>
+        <span>Automated Cybersecurity Assessment Platform</span>
+    </footer>
+
+</div>
+
+{% endblock %}
