@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, Response
 from werkzeug.security import check_password_hash
 from datetime import timedelta
 
@@ -1485,6 +1485,7 @@ def reports_pdf():
     high_count = 0
     medium_count = 0
     low_count = 0
+    info_count = 0
 
     for finding in findings:
 
