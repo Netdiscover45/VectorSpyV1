@@ -1,5 +1,5 @@
 # 🛡️ VectorSpy
-### Automated Cybersecurity Assessment & Risk Visualization Platform
+### Automated Cybersecurity Assessment, Attack-surface Discovery and Threat Intelligence Platform
 
 **VectorSpy** is a Python and Flask-based cybersecurity assessment platform designed to simplify authorized security testing through a centralized web interface. It integrates network reconnaissance, web security configuration checks, technology fingerprinting, rule-based risk classification, findings management, and scan history into a unified dashboard.
 
