@@ -550,10 +550,7 @@ VectorSpy V1 establishes a modular workflow for basic cybersecurity assessment, 
 
 ## 📄 17. License
 
-This project is developed for academic and educational purposes.
-
-A formal open-source license has not been specified. If you plan to publish the repository publicly, consider selecting an appropriate license and adding a `LICENSE` file.
-
----
+This project is licensed under the MIT License.
+See the [LICENSE](LICENSE) file for details.
 
 **VectorSpy — A Practical Approach to Cybersecurity Assessment and Risk Visibility.**
