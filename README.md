@@ -63,6 +63,20 @@ The primary objectives of VectorSpy are to:
 - Session-based authentication.
 - Protected dashboard and assessment routes.
 
+## 📸 Application Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Network Assessment
+![Network Scan](screenshots/network-scan.png)
+
+### Web Security Assessment
+![Web Security](screenshots/web-security.png)
+
+### Technology Finder Assessment
+![Technology Finder](screenshots/tech-finder.png)
+
 ### 🌐 Network Security Assessment
 
 - Nmap-based network scanning.
