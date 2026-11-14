@@ -66,16 +66,16 @@ The primary objectives of VectorSpy are to:
 ## 📸 Application Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screnshots/dashboard.png)
 
 ### Network Assessment
-![Network Scan](screenshots/network-scan.png)
+![Network Scan](screnshots/network-scan.png)
 
 ### Web Security Assessment
-![Web Security](screenshots/web-security.png)
+![Web Security](screnshots/web-security.png)
 
 ### Technology Finder Assessment
-![Technology Finder](screenshots/tech-finder.png)
+![Technology Finder](screnshots/tech-finder.png)
 
 ### 🌐 Network Security Assessment
 
