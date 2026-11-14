@@ -51,7 +51,10 @@ import sqlite3
 
 app = Flask(__name__)
 
-app.secret_key = "vectorspy-random-secret-key-change-this"
+app.secret_key = os.environ.get("SECRET_KEY")
+
+if not app.secret_key:
+    raise RuntimeError("SECRET_KEY is not configured")
 
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
